@@ -5,39 +5,27 @@
 @section('content')
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto space-y-6">
-    
-    {{-- HEADER HALAMAN --}}
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-bold text-gray-800">Laporan Lengkap</h2>
             <p class="text-sm text-gray-600">Arsip semua tiket (Open, Proses, Selesai)</p>
         </div>
     </div>
-
-    {{-- FILTER FORM --}}
     <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mt-8">
         <form action="{{ route('admin.report') }}" method="GET" class="mb-0">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                
-                {{-- Input Pencarian --}}
                 <div class="md:col-span-1">
                     <label class="block text-sm font-medium mb-2 text-gray-700">Cari</label>
                     <input type="text" name="search" value="{{ request('search') }}" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50 border" placeholder="Kode / Judul...">
                 </div>
-
-                {{-- Input Tanggal Mulai --}}
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700">Dari Tanggal</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm bg-gray-50 border">
                 </div>
-
-                {{-- Input Tanggal Akhir --}}
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700">Sampai Tanggal</label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm bg-gray-50 border">
                 </div>
-
-                {{-- Tombol Filter --}}
                 <div>
                     <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
                         Filter Data
@@ -46,13 +34,9 @@
             </div>
         </form>
     </div>
-        
-    {{-- TABEL DATA --}}
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
-                
-                {{-- THEAD --}}
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-left">Tanggal</th>
@@ -62,31 +46,21 @@
                         <th scope="col" class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-left">Aksi</th>
                     </tr>
                 </thead>
-                
-                {{-- TBODY --}}
                 <tbody class="bg-white divide-y divide-gray-100">
                     @forelse($tickets as $ticket)
                     <tr class="hover:bg-gray-50 transition-colors duration-200">
-                        
-                        {{-- 1. TANGGAL --}}
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $ticket->created_at->timezone('Asia/Jakarta')->format('d M Y') }}
                             <div class="text-xs text-gray-400">{{ $ticket->created_at->timezone('Asia/Jakarta')->format('H:i') }} WIB</div>
                         </td>
-
-                        {{-- 2. TIKET & BARANG --}}
                         <td class="px-6 py-4">
                             <div class="text-sm font-medium text-gray-900">#{{ $ticket->ticket_code }}</div>
                             <div class="text-sm text-gray-500">{{ Str::limit($ticket->title, 30) }}</div>
                         </td>
-
-                        {{-- 3. PELAPOR --}}
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">{{ $ticket->user->full_name ?? 'User' }}</div>
                             <div class="text-xs text-gray-500">{{ $ticket->category->name ?? 'Umum' }}</div>
                         </td>
-
-                        {{-- 4. STATUS --}}
                         <td class="px-6 py-4">
                             @if($ticket->status == 'open')
                                 <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 shadow-sm">
@@ -105,8 +79,6 @@
                                 </span>
                             @endif
                         </td>
-
-                        {{-- 5. AKSI & MODAL --}}
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button type="button" 
                                     data-modal-target="modal-detail-{{ $ticket->id }}" 
@@ -114,14 +86,9 @@
                                     class="text-indigo-600 hover:text-indigo-900 hover:underline transition-colors">
                                 Detail
                             </button>
-
-                            {{-- MODAL --}}
-                            {{-- MODAL DETAIL (FULL REPORT STYLE) --}}
                             <div id="modal-detail-{{ $ticket->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full text-left whitespace-normal">
                                 <div class="relative p-4 w-full max-w-4xl max-h-full">
                                     <div class="relative bg-white border border-gray-200 rounded-xl shadow-2xl">
-                                        
-                                        {{-- 1. HEADER MODAL --}}
                                         <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-100 rounded-t bg-gray-50/50">
                                             <div>
                                                 <h3 class="text-lg font-bold text-gray-900">
@@ -134,11 +101,7 @@
                                                 <span class="sr-only">Close modal</span>
                                             </button>
                                         </div>
-                                        
-                                        {{-- 2. BODY MODAL --}}
                                         <div class="p-4 md:p-6 space-y-6">
-                                            
-                                            {{-- A. Info Utama (Judul & Status) --}}
                                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-dashed border-gray-200 pb-6">
                                                 <div>
                                                     <h3 class="text-xl font-bold text-gray-900">{{ $ticket->title }}</h3>
@@ -150,8 +113,6 @@
                                                         <span>{{ $ticket->created_at->translatedFormat('d F Y, H:i') }} WIB</span>
                                                     </div>
                                                 </div>
-
-                                                {{-- Status Badge --}}
                                                 <div class="shrink-0">
                                                     @if($ticket->status == 'open')
                                                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 shadow-sm">
@@ -171,11 +132,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-
-                                            {{-- B. Grid Layout (Kiri: Fisik, Kanan: Log) --}}
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                
-                                                {{-- KOLOM KIRI: Deskripsi & Foto --}}
                                                 <div>
                                                     <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
                                                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -200,16 +157,13 @@
                                                         </div>
                                                     @endif
                                                 </div>
-
-                                                {{-- KOLOM KANAN: Timeline / Log Aktivitas --}}
                                                 <div class="md:border-s md:border-gray-100 md:ps-8">
                                                     <h4 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
                                                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                         Riwayat Aktivitas
                                                     </h4>
                                                     
-                                                    <ol class="relative border-s border-gray-200 ml-2">                  
-                                                        {{-- LOG 1: DIBUAT --}}
+                                                    <ol class="relative border-s border-gray-200 ml-2">
                                                         <li class="mb-8 ms-6">
                                                             <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-4 ring-white">
                                                                 <svg class="w-2.5 h-2.5 text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/></svg>
@@ -218,12 +172,9 @@
                                                             <time class="block mb-2 text-xs font-normal leading-none text-gray-400">{{ $ticket->created_at->translatedFormat('d M Y, H:i') }}</time>
                                                             <p class="text-xs text-gray-500">Laporan masuk ke sistem oleh {{ $ticket->user->full_name ?? 'User' }}.</p>
                                                         </li>
-
-                                                        {{-- LOG 2: KOMENTAR & UPDATE --}}
                                                         @forelse($ticket->comments as $comment)
                                                             <li class="mb-8 ms-6">
-                                                                @php 
-                                                                    // Logika warna titik: Hijau jika pesan mengandung "Selesai", Biru untuk lainnya
+                                                                @php
                                                                     $isDone = str_contains(strtoupper($comment->message), 'SELESAI');
                                                                     $dotBg = $isDone ? 'bg-green-100' : 'bg-gray-100';
                                                                     $dotIconColor = $isDone ? 'text-green-800' : 'text-gray-600';
@@ -254,8 +205,6 @@
 
                                             </div>
                                         </div>
-
-                                        {{-- 3. FOOTER MODAL --}}
                                         <div class="flex items-center justify-end p-4 md:p-5 border-t border-gray-100 rounded-b bg-gray-50/50">
                                             <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="text-gray-700 bg-white border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 hover:bg-gray-50 hover:text-gray-900 transition-colors">
                                                 Tutup
@@ -277,11 +226,7 @@
                 </tbody>
             </table>
         </div>
-        
-        {{-- PAGINATION CUSTOM (SESUAI REQUEST) --}}
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            
-            {{-- 1. INFO SHOWING DATA --}}
             <div class="text-sm font-normal text-gray-500">
                 Showing 
                 <span class="font-semibold text-gray-900">{{ $tickets->firstItem() ?? 0 }}</span> 
@@ -291,13 +236,9 @@
                 <span class="font-semibold text-gray-900">{{ $tickets->total() }}</span> 
                 results
             </div>
-
-            {{-- 2. NAVIGASI TOMBOL --}}
             @if ($tickets->hasPages())
             <nav aria-label="Page navigation example">
                 <ul class="flex -space-x-px text-sm">
-                    
-                    {{-- Previous --}}
                     <li>
                         @if ($tickets->onFirstPage())
                             <span class="flex items-center justify-center text-gray-400 bg-white box-border border border-gray-300 font-medium rounded-s-lg text-sm px-3 h-10 cursor-not-allowed">
@@ -309,8 +250,6 @@
                             </a>
                         @endif
                     </li>
-
-                    {{-- Angka Halaman --}}
                     @foreach (range(1, $tickets->lastPage()) as $i)
                         <li>
                             @if ($i == $tickets->currentPage())
@@ -324,8 +263,6 @@
                             @endif
                         </li>
                     @endforeach
-
-                    {{-- Next --}}
                     <li>
                         @if ($tickets->hasMorePages())
                             <a href="{{ $tickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white box-border border border-gray-300 hover:bg-gray-100 hover:text-gray-700 font-medium rounded-e-lg text-sm px-3 h-10 focus:outline-none transition-colors">

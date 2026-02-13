@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Consumable extends Model
+{
+    use HasFactory;
+
+    protected $table = 'consumables';
+
+    protected $fillable = [
+        'name',
+        'category',
+        'stock',
+        'min_stock',
+        'unit',
+        'location',
+        'image_path',
+    ];
+
+
+    protected $casts = [
+        'stock' => 'integer',
+        'min_stock' => 'integer',
+    ];
+}

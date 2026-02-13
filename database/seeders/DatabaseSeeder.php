@@ -3,65 +3,73 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Ticket;
-use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Asset;
+use App\Models\Consumable;
+use App\Models\Ticket;
+use App\Models\MaintenanceSchedule;
+use App\Models\AssetLoan;
+use App\Models\ConsumableRequest;
+use App\Models\Procurement;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. BERSIHKAN DATABASE
+        // =========================================================
+        // 1. BERSIHKAN DATABASE (TRUNCATE SEMUA TABEL)
+        // =========================================================
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('ticket_comments')->truncate();
-        DB::table('tickets')->truncate();
-        DB::table('users')->truncate();
-        DB::table('categories')->truncate();
+        
+        $tables = [
+            'procurements', 
+            'asset_loans', 
+            'consumable_requests', 
+            'maintenance_schedules', 
+            'ticket_comments', 
+            'tickets', 
+            'consumables', 
+            'assets', 
+            'categories', 
+            'users'
+        ];
+
+        foreach ($tables as $table) {
+            if (DB::getSchemaBuilder()->hasTable($table)) {
+                DB::table($table)->truncate();
+            }
+        }
+        
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+
+        // =========================================================
+        // 2. MULAI SEEDING DATA
+        // =========================================================
         DB::transaction(function () {
-
-            // ---------------------------------------------------------
-            // 2. KATEGORI
-            // ---------------------------------------------------------
-            $catHardware = Category::create(['name' => 'Hardware', 'description' => 'Monitor, CPU, Printer, Mouse']);
-            $catSoftware = Category::create(['name' => 'Software', 'description' => 'OS, Office, Antivirus']);
-            $catNetwork  = Category::create(['name' => 'Jaringan', 'description' => 'Wifi, LAN, Internet Access']);
-
-
-            // ---------------------------------------------------------
-            // 3. USER (ADMIN, TEKNISI, KARYAWAN)
-            // ---------------------------------------------------------
             
-            // Admin
-            User::create([
+            $now = Carbon::now();
+
+            // --- A. USER ---
+            $admin = User::create([
                 'username' => 'admin', 'full_name' => 'Super Admin', 'email' => 'admin@kantor.com',
                 'password' => Hash::make('password'), 'role' => 'admin', 'division' => 'IT Dept'
             ]);
 
-            // Teknisi 1 (Andi - Rajin, banyak tiket selesai)
             $techAndi = User::create([
                 'username' => 'tech_andi', 'full_name' => 'Andi Saputra', 'email' => 'andi@kantor.com',
                 'password' => Hash::make('password'), 'role' => 'it_support', 'division' => 'IT Support'
             ]);
 
-            // Teknisi 2 (Budi - Sedang handle tiket sulit)
             $techBudi = User::create([
                 'username' => 'tech_budi', 'full_name' => 'Budi Santoso', 'email' => 'budi@kantor.com',
                 'password' => Hash::make('password'), 'role' => 'it_support', 'division' => 'IT Support'
             ]);
 
-            // Teknisi 3 (Citra - Baru, belum ada tiket)
-            $techCitra = User::create([
-                'username' => 'tech_citra', 'full_name' => 'Citra Lestari', 'email' => 'citra@kantor.com',
-                'password' => Hash::make('password'), 'role' => 'it_support', 'division' => 'IT Support'
-            ]);
-
-            // Karyawan Pelapor
             $userMkt = User::create([
                 'username' => 'user_mkt', 'full_name' => 'Rina Marketing', 'email' => 'rina@kantor.com',
                 'password' => Hash::make('password'), 'role' => 'user', 'division' => 'Marketing'
@@ -72,109 +80,119 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'), 'role' => 'user', 'division' => 'Finance'
             ]);
 
-            $userHR = User::create([
-                'username' => 'user_hr', 'full_name' => 'Eka HRD', 'email' => 'eka@kantor.com',
-                'password' => Hash::make('password'), 'role' => 'user', 'division' => 'HRD'
+            // --- B. KATEGORI (Hanya untuk Tiket) ---
+            $catHard = Category::create(['name' => 'Hardware', 'description' => 'Perangkat keras fisik']);
+            $catSoft = Category::create(['name' => 'Software', 'description' => 'Aplikasi dan OS']);
+            $catNet  = Category::create(['name' => 'Jaringan', 'description' => 'Internet dan LAN']);
+
+            // --- C. ASET FISIK (DIHAPUS CATEGORY_ID NYA) ---
+            $laptop = Asset::create([
+                'code' => 'AST-LPT-001', 'name' => 'Laptop Dell Latitude 7490', 'serial_number' => 'SN-LPT-001',
+                'condition' => 'good', 'status' => 'ready', 'location' => 'Gudang IT', 'purchase_date' => '2023-01-01',
             ]);
 
+            $pc = Asset::create([
+                'code' => 'AST-PC-010', 'name' => 'PC Rakitan Core i5', 'serial_number' => 'SN-PC-010',
+                'condition' => 'good', 'status' => 'in_use', 'user_id' => $userFin->id, 'location' => 'Ruang Finance', 'purchase_date' => '2022-06-20',
+            ]);
 
-            // ---------------------------------------------------------
-            // 4. HISTORI TIKET SELESAI (Backdate 7 Hari Terakhir)
-            // ---------------------------------------------------------
-            // Kita buat 20 tiket selesai acak
-            for ($i = 0; $i < 20; $i++) {
-                $daysAgo = rand(0, 7);
-                $date = Carbon::now()->subDays($daysAgo)->setHour(rand(8, 16));
-                
-                // Random pelapor & teknisi
-                $randomUser = [$userMkt, $userFin, $userHR][rand(0, 2)];
-                $randomTech = [$techAndi, $techBudi][rand(0, 1)]; // Citra belum handle tiket selesai
-                $randomCat  = [$catHardware, $catSoftware, $catNetwork][rand(0, 2)];
+            $printer = Asset::create([
+                'code' => 'AST-PRT-005', 'name' => 'Printer Epson L3210', 'serial_number' => 'SN-PRT-005',
+                'condition' => 'maintenance', 'status' => 'ready', 'location' => 'Meja Servis IT', 'purchase_date' => '2023-05-10',
+            ]);
 
-                $ticket = Ticket::create([
-                    'ticket_code'   => 'DONE-' . $date->timestamp . $i,
-                    'user_id'       => $randomUser->id,
-                    'assigned_to'   => $randomTech->id, // Mengisi kolom assigned_to
-                    'category_id'   => $randomCat->id,
-                    'title'         => 'Perbaikan Rutin #' . ($i+1),
-                    'description'   => 'Kendala operasional harian yang sudah diselesaikan.',
-                    'priority'      => ['low', 'medium'][rand(0, 1)],
-                    'status'        => 'resolved',
-                    'queue_number'  => $i + 1,
-                    'created_at'    => $date,
-                    'updated_at'    => $date->copy()->addHours(rand(1, 5)),
-                ]);
-
-                // Komentar Penyelesaian
-                Comment::create([
-                    'ticket_id' => $ticket->id,
-                    'user_id'   => $randomTech->id,
-                    'message'   => 'SELESAI: Masalah sudah ditangani dan user sudah konfirmasi OK.',
-                    'created_at' => $date->copy()->addHours(rand(1, 5))
-                ]);
-            }
-
-
-            // ---------------------------------------------------------
-            // 5. TIKET "IN PROGRESS" (Sedang Dikerjakan)
-            // ---------------------------------------------------------
+            // --- D. LOGISTIK (CONSUMABLES) ---
+            $tinta = Consumable::create([
+                'name' => 'Tinta Epson 664 Black', 'category' => 'Tinta', 'stock' => 10, 'min_stock' => 5, 'unit' => 'Botol', 'location' => 'Lemari A'
+            ]);
             
-            // Tiket 1: Dipegang Andi (Hardware)
-            $t1 = Ticket::create([
-                'ticket_code' => 'PROG-001', 'user_id' => $userMkt->id, 'assigned_to' => $techAndi->id,
-                'category_id' => $catHardware->id, 'title' => 'Printer Macet Total',
-                'description' => 'Printer Epson di meja depan paper jam terus.',
-                'priority' => 'medium', 'status' => 'in_progress', 'queue_number' => 100,
-                'created_at' => now()->subHours(4), 'updated_at' => now()
-            ]);
-            Comment::create(['ticket_id' => $t1->id, 'user_id' => $techAndi->id, 'message' => 'PROGRES: Sedang membongkar roller printer.']);
-
-            // Tiket 2: Dipegang Andi (Network)
-            $t2 = Ticket::create([
-                'ticket_code' => 'PROG-002', 'user_id' => $userHR->id, 'assigned_to' => $techAndi->id,
-                'category_id' => $catNetwork->id, 'title' => 'Kabel LAN Putus',
-                'description' => 'Kabel LAN di ruang meeting tidak connect.',
-                'priority' => 'low', 'status' => 'in_progress', 'queue_number' => 101,
-                'created_at' => now()->subHours(2), 'updated_at' => now()
+            $kertas = Consumable::create([
+                'name' => 'Kertas A4 PaperOne', 'category' => 'ATK', 'stock' => 50, 'min_stock' => 10, 'unit' => 'Rim', 'location' => 'Gudang Utama'
             ]);
 
-            // Tiket 3: Dipegang Budi (Software - CRITICAL)
-            $t3 = Ticket::create([
-                'ticket_code' => 'PROG-CRIT', 'user_id' => $userFin->id, 'assigned_to' => $techBudi->id,
-                'category_id' => $catSoftware->id, 'title' => 'SERVER ACCURATE DOWN',
-                'description' => 'Divisi finance tidak bisa input faktur, urgent!',
-                'priority' => 'high', 'status' => 'in_progress', 'queue_number' => 102,
-                'created_at' => now()->subHours(1), 'updated_at' => now()
-            ]);
-            Comment::create(['ticket_id' => $t3->id, 'user_id' => $techBudi->id, 'message' => 'PROGRES: Restarting service database server...']);
-
-
-            // ---------------------------------------------------------
-            // 6. TIKET "OPEN" (Belum Ada yang Ambil)
-            // ---------------------------------------------------------
-
+            // --- E. TIKET (OPERASIONAL) ---
             Ticket::create([
-                'ticket_code' => 'OPEN-001', 'user_id' => $userMkt->id, 'assigned_to' => null,
-                'category_id' => $catSoftware->id, 'title' => 'Install Adobe Photoshop',
-                'description' => 'Mohon install photoshop untuk desainer baru.',
-                'priority' => 'medium', 'status' => 'open', 'queue_number' => 103,
-                'created_at' => now()
+                'ticket_code' => 'TIK-001', 'user_id' => $userMkt->id, 'category_id' => $catNet->id,
+                'title' => 'WiFi Marketing Lemot', 'description' => 'Tidak bisa upload file besar.',
+                'priority' => 'high', 'status' => 'open', 
+                'queue_number' => 1, 
+                'created_at' => $now
             ]);
 
             Ticket::create([
-                'ticket_code' => 'OPEN-002', 'user_id' => $userHR->id, 'assigned_to' => null,
-                'category_id' => $catHardware->id, 'title' => 'Request Mouse Baru',
-                'description' => 'Mouse klik kiri kadang macet.',
-                'priority' => 'low', 'status' => 'open', 'queue_number' => 104,
-                'created_at' => now()
+                'ticket_code' => 'TIK-002', 'user_id' => $userFin->id, 'category_id' => $catHard->id, 'assigned_to' => $techAndi->id,
+                'title' => 'PC Suka Restart Sendiri', 'description' => 'Layar biru lalu restart.',
+                'priority' => 'medium', 'status' => 'in_progress', 
+                'queue_number' => 2, 
+                'created_at' => $now->copy()->subHours(3)
             ]);
 
-            Ticket::create([
-                'ticket_code' => 'OPEN-003', 'user_id' => $userFin->id, 'assigned_to' => null,
-                'category_id' => $catNetwork->id, 'title' => 'Wifi Lantai 3 Lemot',
-                'description' => 'Koneksi putus nyambung sejak pagi.',
-                'priority' => 'high', 'status' => 'open', 'queue_number' => 105,
-                'created_at' => now()
+            // --- F. PEMINJAMAN ASET ---
+            DB::table('asset_loans')->insert([
+                'user_id'     => $userMkt->id,
+                'asset_id'    => $laptop->id,
+                'admin_id'    => null,
+                'loan_date'   => $now->copy()->addDay(),
+                'due_date'    => $now->copy()->addDays(4),
+                'return_date' => null,
+                'status'      => 'pending',
+                'notes'       => 'Laptop inventaris ruangan rusak, butuh pengganti.', 
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ]);
+
+            DB::table('asset_loans')->insert([
+                'user_id'     => $userFin->id,
+                'asset_id'    => $pc->id,
+                'admin_id'    => $admin->id,
+                'loan_date'   => $now->copy()->subMonths(6),
+                'due_date'    => $now->copy()->addMonths(6),
+                'return_date' => null,
+                'status'      => 'active',
+                'notes'       => 'Peminjaman jangka panjang untuk operasional.',
+                'created_at'  => $now->copy()->subMonths(6),
+                'updated_at'  => $now->copy()->subMonths(6),
+            ]);
+
+            // --- G. PENGAJUAN PEMBELIAN (PROCUREMENT) ---
+            DB::table('procurements')->insert([
+                'user_id'         => $techBudi->id,
+                'ticket_id'       => null,
+                'item_name'       => 'SSD NVMe Samsung 980 1TB',
+                'description'     => 'Upgrade server database yang lemot.',
+                'quantity'        => 1,
+                'estimated_price' => 1850000,
+                'link_reference'  => 'https://tokopedia.com/ssd-samsung',
+                'priority'        => 'critical',
+                'status'          => 'pending',
+                'admin_note'      => null,
+                'created_at'      => $now,
+                'updated_at'      => $now,
+            ]);
+
+            DB::table('procurements')->insert([
+                'user_id'         => $techAndi->id,
+                'ticket_id'       => null,
+                'item_name'       => 'Tang Crimping LAN',
+                'description'     => 'Alat lama hilang.',
+                'quantity'        => 1,
+                'estimated_price' => 150000,
+                'link_reference'  => null,
+                'priority'        => 'medium',
+                'status'          => 'approved',
+                'admin_note'      => 'ACC, segera beli.',
+                'created_at'      => $now->copy()->subDays(2),
+                'updated_at'      => $now->copy()->subDays(1),
+            ]);
+
+            // --- H. JADWAL MAINTENANCE ---
+            DB::table('maintenance_schedules')->insert([
+                'asset_id'       => $printer->id,
+                'technician_id'  => $techAndi->id,
+                'scheduled_date' => $now->format('Y-m-d'),
+                'status'         => 'scheduled',
+                'created_at'     => $now,
+                'updated_at'     => $now,
             ]);
 
         });

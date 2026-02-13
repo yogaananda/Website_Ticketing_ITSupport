@@ -90,4 +90,5 @@ class TicketController extends Controller
 
         return back()->with('success', 'Status tiket berhasil diperbarui!');
     }
+    
 }

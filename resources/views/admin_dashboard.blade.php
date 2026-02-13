@@ -8,7 +8,6 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-dark-neutral-200">
-            {{-- NAMA USER DINAMIS --}}
             Halo, {{ Auth::user()->full_name ?? Auth::user()->username }}
         </h1>
         <p class="mt-1 text-gray-600 dark:text-neutral-400">
@@ -184,8 +183,6 @@
                         @endforelse
                     </tbody>
                 </table>
-                
-                {{-- SECTION 3: PAGINATION --}}
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
                 Showing <span class="font-semibold text-gray-900">{{ $historyTickets->firstItem() ?? 0 }}</span> 
@@ -230,7 +227,6 @@
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mt-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-gray-900">Statistik Perbaikan (Tahun {{ date('Y') }})</h3>
-                {{-- Badge Tahun --}}
                 <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-400">
                     Tahun Ini
                 </span>
@@ -243,12 +239,9 @@
 
 <script>
     window.chartData = {
-        // Data Mingguan
         labels: @json($weeklyLabels ?? []),
         completed: @json($completedData ?? []),
         pending: @json($pendingData ?? []),
-
-        // Data Tahunan (Pastikan ini ada juga)
         yearlyLabels: @json($yearlyLabels ?? []),
         yearlyCompleted: @json($yearlyCompleted ?? []),
         yearlyPending: @json($yearlyPending ?? [])
