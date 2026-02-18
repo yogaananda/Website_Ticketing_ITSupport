@@ -26,10 +26,9 @@ class UserConsumableController extends Controller
         $request->validate([
             'consumable_id' => 'required|exists:consumables,id',
             'amount'        => 'required|integer|min:1',
-            'reason'        => 'nullable|string|max:255', // Ganti notes jadi reason
+            'reason'        => 'nullable|string|max:255', 
         ]);
 
-        // Cek stok
         $item = Consumable::findOrFail($request->consumable_id);
         if ($request->amount > $item->stock) {
             return redirect()->back()->with('error', 'Jumlah permintaan melebihi stok tersedia!');
@@ -40,8 +39,7 @@ class UserConsumableController extends Controller
             'consumable_id' => $request->consumable_id,
             'amount'        => $request->amount,
             'status'        => 'pending',
-            'reason'        => $request->reason, // Masukkan ke kolom reason
-            // admin_id otomatis null sesuai default migration
+            'reason'        => $request->reason,
         ]);
 
         return redirect()->back()->with('success', 'Permintaan barang berhasil dikirim.');

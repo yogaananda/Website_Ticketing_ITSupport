@@ -5,21 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
-    protected $table = 'ticket_comments'; 
+    protected $table = 'appointments';
+
     protected $fillable = [
-        'ticket_id',
-        'user_id',
-        'message',
+        'title',    
+        'date',     
+        'color',    
+        'user_id',  
     ];
 
-    public function ticket()
-    {
-        return $this->belongsTo(Ticket::class);
-    }
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 
     public function user()
     {

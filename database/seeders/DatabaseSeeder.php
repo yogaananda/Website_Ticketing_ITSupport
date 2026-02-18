@@ -20,9 +20,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // =========================================================
-        // 1. BERSIHKAN DATABASE (TRUNCATE SEMUA TABEL)
-        // =========================================================
+
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
         $tables = [
@@ -46,15 +44,10 @@ class DatabaseSeeder extends Seeder
         
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-
-        // =========================================================
-        // 2. MULAI SEEDING DATA
-        // =========================================================
         DB::transaction(function () {
             
             $now = Carbon::now();
 
-            // --- A. USER ---
             $admin = User::create([
                 'username' => 'admin', 'full_name' => 'Super Admin', 'email' => 'admin@kantor.com',
                 'password' => Hash::make('password'), 'role' => 'admin', 'division' => 'IT Dept'
@@ -80,12 +73,10 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'), 'role' => 'user', 'division' => 'Finance'
             ]);
 
-            // --- B. KATEGORI (Hanya untuk Tiket) ---
             $catHard = Category::create(['name' => 'Hardware', 'description' => 'Perangkat keras fisik']);
             $catSoft = Category::create(['name' => 'Software', 'description' => 'Aplikasi dan OS']);
             $catNet  = Category::create(['name' => 'Jaringan', 'description' => 'Internet dan LAN']);
 
-            // --- C. ASET FISIK (DIHAPUS CATEGORY_ID NYA) ---
             $laptop = Asset::create([
                 'code' => 'AST-LPT-001', 'name' => 'Laptop Dell Latitude 7490', 'serial_number' => 'SN-LPT-001',
                 'condition' => 'good', 'status' => 'ready', 'location' => 'Gudang IT', 'purchase_date' => '2023-01-01',
@@ -101,7 +92,6 @@ class DatabaseSeeder extends Seeder
                 'condition' => 'maintenance', 'status' => 'ready', 'location' => 'Meja Servis IT', 'purchase_date' => '2023-05-10',
             ]);
 
-            // --- D. LOGISTIK (CONSUMABLES) ---
             $tinta = Consumable::create([
                 'name' => 'Tinta Epson 664 Black', 'category' => 'Tinta', 'stock' => 10, 'min_stock' => 5, 'unit' => 'Botol', 'location' => 'Lemari A'
             ]);
@@ -110,7 +100,6 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Kertas A4 PaperOne', 'category' => 'ATK', 'stock' => 50, 'min_stock' => 10, 'unit' => 'Rim', 'location' => 'Gudang Utama'
             ]);
 
-            // --- E. TIKET (OPERASIONAL) ---
             Ticket::create([
                 'ticket_code' => 'TIK-001', 'user_id' => $userMkt->id, 'category_id' => $catNet->id,
                 'title' => 'WiFi Marketing Lemot', 'description' => 'Tidak bisa upload file besar.',
@@ -127,7 +116,6 @@ class DatabaseSeeder extends Seeder
                 'created_at' => $now->copy()->subHours(3)
             ]);
 
-            // --- F. PEMINJAMAN ASET ---
             DB::table('asset_loans')->insert([
                 'user_id'     => $userMkt->id,
                 'asset_id'    => $laptop->id,
@@ -154,7 +142,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at'  => $now->copy()->subMonths(6),
             ]);
 
-            // --- G. PENGAJUAN PEMBELIAN (PROCUREMENT) ---
             DB::table('procurements')->insert([
                 'user_id'         => $techBudi->id,
                 'ticket_id'       => null,
@@ -185,7 +172,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at'      => $now->copy()->subDays(1),
             ]);
 
-            // --- H. JADWAL MAINTENANCE ---
             DB::table('maintenance_schedules')->insert([
                 'asset_id'       => $printer->id,
                 'technician_id'  => $techAndi->id,

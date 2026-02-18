@@ -13,24 +13,22 @@ class Procurement extends Model
 
     protected $fillable = [
         'user_id',
-        'ticket_id',       // Nullable
+        'ticket_id',      
         'item_name',
         'description',
         'quantity',
         'estimated_price',
         'link_reference',
-        'priority',        // Enum: low, medium, high, critical
-        'status',          // Enum: pending, approved, etc
+        'priority',       
+        'status',          
         'admin_note'
     ];
 
-    // Relasi ke User (Pemohon)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Tiket (Opsional, jika pembelian terkait tiket servis tertentu)
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);

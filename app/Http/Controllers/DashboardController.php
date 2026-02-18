@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\AssetLoan;
+use App\Models\ConsumableRequest;
+use App\Models\Procurement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -13,16 +16,18 @@ class DashboardController extends Controller
     public function user()
     {
         $userId = Auth::id();
-        $tickets = Ticket::where('user_id', $userId)
-            ->with(['technician', 'category'])
-            ->latest()
-            ->paginate(5);
-        
+        $role = Auth::user()->role;
+        $globalData = $this->getGlobalNotifs($role);
+
+        $tickets = Ticket::where('user_id', $userId)->with(['technician', 'category'])->latest()->paginate(5);
         $activeTickets = Ticket::where('user_id', $userId)->whereIn('status', ['open', 'in_progress'])->count();
         $resolvedTickets = Ticket::where('user_id', $userId)->whereIn('status', ['resolved', 'closed'])->count();
         $globalQueue = Ticket::where('status', 'open')->count();
 
-        return view('user_dashboard', compact('tickets', 'activeTickets', 'resolvedTickets', 'globalQueue'));
+        return view('user_dashboard', array_merge(
+            compact('tickets', 'activeTickets', 'resolvedTickets', 'globalQueue'),
+            $globalData
+        ));
     }
     
     public function it(Request $request)
@@ -158,5 +163,26 @@ class DashboardController extends Controller
         }
 
         return back()->with('success', 'Data user berhasil diperbarui!');
+    }
+    private function getGlobalNotifs($role)
+    {
+        $notifs = [
+            'pendingApprovals' => 0,
+            'openTickets' => 0,
+            'pendingProcurements' => 0
+        ];
+
+        if ($role === 'admin') {
+            $pendingAssets = AssetLoan::where('status', 'pending')->count();
+            $pendingConsumables = ConsumableRequest::where('status', 'pending')->count();
+            $notifs['pendingApprovals'] = $pendingAssets + $pendingConsumables;
+            $notifs['pendingProcurements'] = Procurement::where('status', 'pending')->count();
+        }
+
+        if ($role === 'it_support' || $role === 'admin') {
+            $notifs['openTickets'] = Ticket::where('status', 'open')->count();
+        }
+
+        return $notifs;
     }
 }

@@ -8,7 +8,6 @@
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-800 dark:text-dark-neutral-200">
-        {{-- NAMA USER DINAMIS --}}
         Halo, {{ Auth::user()->full_name ?? Auth::user()->username }}
       </h1>
       <p class="mt-1 text-gray-600 dark:text-neutral-400">
@@ -77,28 +76,19 @@
             </tr>
          </thead>
          <tbody>
-            {{-- LOOPING DATA DARI CONTROLLER --}}
             @forelse($tickets as $ticket)
             <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                
-                {{-- KOLOM 1: KODE TIKET --}}
                 <td class="px-6 py-4 font-bold text-indigo-600">
                     {{ $ticket->ticket_code }}
                 </td>
-
-                {{-- KOLOM 2: JUDUL & KATEGORI --}}
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {{ Str::limit($ticket->title, 30) }}
                     <br>
                     <span class="text-xs font-normal text-gray-500">{{ $ticket->category->name ?? 'Umum' }}</span>
                 </th>
-
-                {{-- KOLOM 3: TANGGAL --}}
                 <td class="px-6 py-4">
                     {{ $ticket->created_at->format('d M Y') }}
                 </td>
-
-                {{-- KOLOM 4: PRIORITAS --}}
                 <td class="px-6 py-4">
                     @if($ticket->priority == 'high' || $ticket->priority == 'critical')
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 shadow-sm">
@@ -117,8 +107,6 @@
                         </span>
                     @endif
                 </td>
-
-                {{-- KOLOM 5: STATUS --}}
                 <td class="px-6 py-4">
                     @if($ticket->status == 'open')
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 shadow-sm">
@@ -137,24 +125,16 @@
                         </span>
                     @endif
                 </td>
-
-                {{-- KOLOM 6: TOMBOL AKSI & MODAL --}}
                 <td class="px-6 py-4 text-center">
-                    
-                    {{-- TOMBOL TRIGGER --}}
                     <button type="button" 
                             data-modal-target="modal-detail-{{ $ticket->id }}" 
                             data-modal-toggle="modal-detail-{{ $ticket->id }}" 
                             class="font-medium text-blue-600 hover:underline">
                         Detail
                     </button>
-
-                    {{-- MODAL DETAIL --}}
                     <div id="modal-detail-{{ $ticket->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full text-left">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
                             <div class="relative bg-white border border-gray-200 rounded-lg shadow-lg">
-                                
-                                {{-- Header Modal --}}
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 rounded-t">
                                     <h3 class="text-lg font-semibold text-gray-900">
                                         Detail Laporan Barang
@@ -164,11 +144,7 @@
                                         <span class="sr-only">Close modal</span>
                                     </button>
                                 </div>
-                                
-                                {{-- Body Modal --}}
                                 <div class="p-4 md:p-6 space-y-6">
-                                    
-                                    {{-- Info Header --}}
                                     <div class="flex justify-between items-start border-b border-dashed border-gray-200 pb-4">
                                         <div>
                                             <h3 class="text-xl font-bold text-gray-900">#{{ $ticket->ticket_code }} - {{ $ticket->title }}</h3>
@@ -185,8 +161,6 @@
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        
-                                        {{-- Kiri: Deskripsi & Foto --}}
                                         <div>
                                             <h4 class="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Deskripsi Kerusakan:</h4>
                                             <p class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -202,8 +176,6 @@
                                                 </div>
                                             @endif
                                         </div>
-
-                                        {{-- Kanan: Log Aktivitas --}}
                                         <div class="md:border-s md:border-gray-100 md:ps-6">
                                             <h4 class="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Log Aktivitas:</h4>
                                             <ol class="relative border-s border-gray-200 ml-2">                  
@@ -226,8 +198,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                {{-- Footer Modal --}}
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
                                     <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="ms-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors">
                                         Tutup Detail
@@ -250,8 +220,6 @@
       </table>
       
       <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            
-            {{-- 1. INFO SHOWING DATA --}}
             <div class="text-sm font-normal text-gray-500">
                 Showing 
                 <span class="font-semibold text-gray-900">{{ $tickets->firstItem() ?? 0 }}</span> 
@@ -261,13 +229,9 @@
                 <span class="font-semibold text-gray-900">{{ $tickets->total() }}</span> 
                 results
             </div>
-
-            {{-- 2. NAVIGASI TOMBOL --}}
             @if ($tickets->hasPages())
             <nav aria-label="Page navigation example">
                 <ul class="flex -space-x-px text-sm">
-                    
-                    {{-- Previous --}}
                     <li>
                         @if ($tickets->onFirstPage())
                             <span class="flex items-center justify-center text-gray-400 bg-white box-border border border-gray-300 font-medium rounded-s-lg text-sm px-3 h-10 cursor-not-allowed">
@@ -279,8 +243,6 @@
                             </a>
                         @endif
                     </li>
-
-                    {{-- Angka Halaman --}}
                     @foreach (range(1, $tickets->lastPage()) as $i)
                         <li>
                             @if ($i == $tickets->currentPage())
@@ -294,8 +256,6 @@
                             @endif
                         </li>
                     @endforeach
-
-                    {{-- Next --}}
                     <li>
                         @if ($tickets->hasMorePages())
                             <a href="{{ $tickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white box-border border border-gray-300 hover:bg-gray-100 hover:text-gray-700 font-medium rounded-e-lg text-sm px-3 h-10 focus:outline-none transition-colors">

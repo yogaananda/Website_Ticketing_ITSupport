@@ -7,26 +7,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // 1. Tampilkan Halaman Login
     public function showLoginForm()
     {
-        return view('login');// Pastikan file blade loginmu ada di folder resources/views/auth/login.blade.php
+        return view('login');
     }
 
-    // 2. Proses Login (Saat tombol ditekan)
     public function login(Request $request)
     {
-        // Validasi input
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
-        // Cek ke Database
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            // Cek Role dan Redirect ke Dashboard yang sesuai
             $role = Auth::user()->role;
 
             if ($role === 'admin') {
@@ -37,14 +30,10 @@ class AuthController extends Controller
                 return redirect()->intended('/user/dashboard');
             }
         }
-
-        // Kalau gagal, balik lagi dengan error
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
-
-    // 3. Proses Logout
     public function logout(Request $request)
     {
         Auth::logout();

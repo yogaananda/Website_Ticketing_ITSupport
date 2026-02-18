@@ -4,31 +4,16 @@
 
 @section('content')
 
-{{-- LOGIC PHP SEDERHANA UNTUK MENENTUKAN TAB AKTIF --}}
-@php
-    // Ambil parameter 'tab' dari URL, jika tidak ada default ke 'assets'
-    $activeTab = request()->query('tab', 'assets');
-    
-    // Hitung badge
-    $countAssets = $assetLoans->where('status', 'pending')->count();
-    $countConsumables = $consumableRequests->where('status', 'pending')->count();
-@endphp
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto space-y-6">
-
-    {{-- HEADER --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-5">
         <div>
             <h2 class="text-2xl font-bold text-gray-900">Persetujuan & Transaksi</h2>
             <p class="text-sm text-gray-500 mt-1">Kelola permintaan masuk terbaru dari karyawan.</p>
         </div>
     </div>
-
-    {{-- TAB NAVIGASI (SERVER SIDE / LINK) --}}
     <div class="border-b border-gray-200">
         <nav class="-mb-px flex gap-6">
-            
-            {{-- TAB 1: PEMINJAMAN ASET --}}
             <a href="{{ url()->current() }}?tab=assets" 
                class="py-4 px-1 inline-flex items-center gap-2 border-b-2 text-sm whitespace-nowrap transition-colors
                {{ $activeTab == 'assets' 
@@ -43,8 +28,6 @@
                     </span>
                 @endif
             </a>
-
-            {{-- TAB 2: PERMINTAAN BARANG --}}
             <a href="{{ url()->current() }}?tab=consumables" 
                class="py-4 px-1 inline-flex items-center gap-2 border-b-2 text-sm whitespace-nowrap transition-colors
                {{ $activeTab == 'consumables' 
@@ -64,8 +47,6 @@
     </div>
 
     <div class="mt-3">
-        
-        {{-- KONTEN TAB 1: ASET (Hanya tampil jika ?tab=assets) --}}
         @if($activeTab == 'assets')
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden animate-fade-in">
             <div class="overflow-x-auto">
@@ -119,7 +100,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                 <div class="flex justify-center gap-2">
-                                    {{-- Menggunakan Route('it.approvals...') --}}
                                     @if($loan->status == 'pending')
                                         <form action="{{ route('it.approvals.asset.approve', $loan->id) }}" method="POST">
                                             @csrf
@@ -154,8 +134,6 @@
             </div>
         </div>
         @endif
-
-        {{-- KONTEN TAB 2: BARANG (Hanya tampil jika ?tab=consumables) --}}
         @if($activeTab == 'consumables')
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden animate-fade-in">
             <div class="overflow-x-auto">
@@ -204,7 +182,7 @@
                                         </form>
                                     @elseif($req->status == 'approved')
                                         <span class="text-green-600 text-xs font-bold flex items-center gap-1 bg-green-50 px-2 py-1 rounded">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Acc
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Approved
                                         </span>
                                     @else
                                         <span class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">Ditolak</span>

@@ -16,43 +16,31 @@
 
     <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-full transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-5 py-6 overflow-y-auto bg-indigo-200 border-e border-default">
-
-        {{-- LOGO / BRAND --}}
         <div class="flex items-center ps-2.5 mb-8">
             <svg class="w-8 h-8 me-3 text-indigo-700" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
             <span class="self-center text-xl font-bold whitespace-nowrap text-indigo-900 uppercase tracking-wider">Tiket Barang</span>
         </div>
-
-        {{-- LOGIKA DASHBOARD & NOTIFIKASI --}}
         @php
             $role = auth()->user()->role;
             $dashboardRoute = '#';
-            
-            // Tentukan Route Dashboard
             if($role === 'admin') $dashboardRoute = route('admin.dashboard'); 
             elseif($role === 'it_support') $dashboardRoute = route('it.dashboard');
             elseif($role === 'user') $dashboardRoute = route('user.dashboard');
-
-            // --- HITUNG NOTIFIKASI (BADGES) ---
             $pendingApprovals = 0;
             $openTickets = 0;
 
             if ($role === 'admin') {
-                // Admin butuh tau ada berapa request pending (Aset + Consumable)
                 $pendingAssets = \App\Models\AssetLoan::where('status', 'pending')->count();
                 $pendingConsumables = \App\Models\ConsumableRequest::where('status', 'pending')->count();
                 $pendingApprovals = $pendingAssets + $pendingConsumables;
             }
 
             if ($role === 'it_support' || $role === 'admin') {
-                // IT Support butuh tau ada berapa tiket status 'open'
-                // Asumsi model Ticket ada & punya status 'open'
                 if(class_exists('\App\Models\Ticket')){
                     $openTickets = \App\Models\Ticket::where('status', 'open')->count();
                 }
             }
 
-            // Helper active state
             function isActive($routes) {
                 if(is_array($routes)) {
                     foreach($routes as $r) {
@@ -65,8 +53,6 @@
         @endphp
 
         <ul class="space-y-3 font-medium">
-            
-            {{-- 1. DASHBOARD UTAMA --}}
             <li>
                 <a href="{{ $dashboardRoute }}" 
                    class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive(['admin.dashboard', 'it.dashboard', 'user.dashboard']) ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
@@ -74,8 +60,6 @@
                     <span class="ms-3">Dashboard</span>
                 </a>
             </li>
-
-            {{-- 2. MENU KHUSUS ADMIN --}}
             @if($role === 'admin')
             <li class="pt-2 mt-2 border-t border-indigo-300/50">
                 <p class="text-xs font-semibold text-indigo-500 uppercase px-3 mb-2">Master Data</p>
@@ -103,7 +87,7 @@
                     <span class="ms-3">Manajemen User</span>
                 </a>
             </li>
-            <li> {{-- APPROVAL DENGAN BADGE --}}
+            <li> 
                 <a href="{{ route('admin.approvals.index') }}" class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('admin.approvals.*') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
                     <svg class="w-5 h-5 transition duration-75 {{ isActive('admin.approvals.*') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span class="ms-3 flex-1 whitespace-nowrap">Persetujuan</span>
@@ -116,15 +100,13 @@
                 </a>
             </li>
             @endif
-
-            {{-- 3. MENU KHUSUS IT SUPPORT --}}
             @if($role === 'it_support')
             <li class="pt-2 mt-2 border-t border-indigo-300/50">
                 <p class="text-xs font-semibold text-indigo-500 uppercase px-3 mb-2">Operasional</p>
             </li>
             <li> 
-                <a href="#" class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('maintenance.*') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
-                    <svg class="w-5 h-5 transition duration-75 {{ isActive('maintenance.*') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                <a href="{{ route('it.maintenance.index') }}" class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('it.maintenance.*') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
+                    <svg class="w-5 h-5 transition duration-75 {{ isActive('it.maintenance.*') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                     <span class="ms-3">Jadwal Maintenance</span>
                 </a>
             </li>
@@ -141,8 +123,6 @@
                 </a>
             </li>
             @endif
-
-            {{-- 4. MENU KHUSUS USER --}}
             @if($role === 'user')
             <li class="pt-2 mt-2 border-t border-indigo-300/50">
                 <p class="text-xs font-semibold text-indigo-500 uppercase px-3 mb-2">Layanan</p>
@@ -160,26 +140,6 @@
                 </a>
             </li>
             @endif
-
-            {{-- 5. MENU UMUM (Tiket Kerusakan + BADGE) --}}
-            <li class="pt-2 mt-2 border-t border-indigo-300/50">
-                <p class="text-xs font-semibold text-indigo-500 uppercase px-3 mb-2">Helpdesk</p>
-            </li>
-            <li>
-                <a href="{{ route('tickets.index') }}" 
-                   class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('tickets.*') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
-                    <svg class="w-5 h-5 transition duration-75 {{ isActive('tickets.*') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 13h3.439a.991.991 0 0 1 .908.6 3.978 3.978 0 0 0 7.306 0 .99.99 0 0 1 .908-.6H20M4 13v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6M4 13l2-9h12l2 9M9 7h6m-7 3h8"/></svg>
-                    <span class="ms-3 flex-1 whitespace-nowrap">Tiket Kerusakan</span>
-                    
-                    {{-- BADGE BIRU (Untuk IT Support/Admin jika ada tiket open) --}}
-                    @if(($role === 'it_support' || $role === 'admin') && $openTickets > 0)
-                        <span class="inline-flex items-center justify-center w-5 h-5 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
-                            {{ $openTickets }}
-                        </span>
-                    @endif
-                </a>
-            </li>
-
             <li class="pt-4 mt-4 border-t border-indigo-300">
                 <a href="javascript:void(0)" data-modal-target="modal-logout" data-modal-toggle="modal-logout" 
                    class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-white/50 hover:text-indigo-700 group transition-all cursor-pointer">

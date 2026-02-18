@@ -9,15 +9,15 @@ class ConsumableRequest extends Model
 {
     use HasFactory;
 
-    protected $table = 'consumable_requests'; // Pastikan nama tabel benar
+    protected $table = 'consumable_requests';
 
     protected $fillable = [
         'user_id',
         'consumable_id',
         'amount',
         'status',
-        'admin_id', // Tambahan sesuai migrasi Anda
-        'reason',   // Ganti 'notes' jadi 'reason'
+        'admin_id', 
+        'reason',   
     ];
 
     public function user()
@@ -29,8 +29,7 @@ class ConsumableRequest extends Model
     {
         return $this->belongsTo(Consumable::class);
     }
-    
-    // Opsional: Relasi ke Admin (User)
+
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');

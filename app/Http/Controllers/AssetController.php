@@ -11,7 +11,7 @@ class AssetController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Asset::with('user'); // Eager load relasi user
+        $query = Asset::with('user'); 
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -21,7 +21,7 @@ class AssetController extends Controller
         }
 
         $assets = $query->latest()->paginate(10);
-        $users = User::all(); // Diperlukan untuk dropdown pemegang di modal
+        $users = User::all(); 
 
         return view('admin_assets', compact('assets', 'users'));
     }

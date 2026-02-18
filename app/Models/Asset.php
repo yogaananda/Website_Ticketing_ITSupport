@@ -21,9 +21,6 @@ class Asset extends Model
         'location',
     ];
 
-    /**
-     * Relasi ke User (Pemegang Aset)
-     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

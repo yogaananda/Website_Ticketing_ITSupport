@@ -7,7 +7,6 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-dark-neutral-200">
-            {{-- NAMA USER DINAMIS --}}
             Halo, {{ Auth::user()->full_name ?? Auth::user()->username }}
         </h1>
         <p class="mt-1 text-gray-600 dark:text-neutral-400">

@@ -38,8 +38,6 @@
     </div>
 
     <div id="default-tab-content">
-        
-        {{-- 1. TABEL USER --}}
         <div class="hidden" id="user" role="tabpanel" aria-labelledby="user-tab">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
@@ -79,8 +77,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- 2. TABEL IT SUPPORT --}}
         <div class="hidden" id="it" role="tabpanel" aria-labelledby="it-tab">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
@@ -120,8 +116,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- 3. TABEL ADMIN --}}
         <div class="hidden" id="admin" role="tabpanel" aria-labelledby="admin-tab">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
@@ -164,8 +158,6 @@
 
     </div>
 </div>
-
-{{-- MODAL TAMBAH USER --}}
 <div id="add-user-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
         <div class="relative bg-white rounded-xl shadow-2xl border border-gray-100">
@@ -259,8 +251,6 @@
         </div>
     </div>
 </div>
-
-{{-- MODAL EDIT USER (LOOPING) --}}
 @foreach($users as $user)
 <div id="edit-modal-{{ $user->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">

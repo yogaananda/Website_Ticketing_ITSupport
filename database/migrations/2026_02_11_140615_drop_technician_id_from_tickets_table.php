@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            // Hapus Foreign Key dulu (jika ada), formatnya: nama_tabel_nama_kolom_foreign
-            // Atau pakai array syntax biar aman:
             $table->dropForeign(['technician_id']); 
-            
-            // Baru hapus kolomnya
             $table->dropColumn('technician_id');
         });
     }
@@ -27,7 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            // Kembalikan kolom jika rollback
             $table->foreignId('technician_id')->nullable()->constrained('users')->onDelete('set null');
         });
     }

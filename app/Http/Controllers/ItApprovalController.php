@@ -21,10 +21,17 @@ class ItApprovalController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // VIEW KHUSUS IT
+        // LOGIC PENENTUAN TAB & BADGE (Dari permintaan Anda)
+        $activeTab = request()->query('tab', 'assets');
+        $countAssets = $assetLoans->where('status', 'pending')->count();
+        $countConsumables = $consumableRequests->where('status', 'pending')->count();
+
         return view('it_approvals', compact(
             'assetLoans',
-            'consumableRequests'
+            'consumableRequests',
+            'activeTab',
+            'countAssets',
+            'countConsumables'
         ));
     }
 

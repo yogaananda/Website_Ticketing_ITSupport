@@ -5,8 +5,6 @@
 @section('content')
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto space-y-8">
-
-    {{-- HEADER SECTION --}}
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200 pb-6">
         <div>
             <h2 class="text-2xl font-bold text-gray-900">Request Pembelian (Procurement)</h2>
@@ -18,22 +16,16 @@
             Buat Pengajuan Baru
         </button>
     </div>
-
-    {{-- TABLE CARD --}}
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                    
-                    {{-- Table Header --}}
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 bg-gray-50/50">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800">Daftar Pengajuan</h2>
                             <p class="text-sm text-gray-500">Riwayat pengajuan pembelian barang.</p>
                         </div>
                     </div>
-
-                    {{-- Table Content --}}
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -63,8 +55,6 @@
                         <tbody class="divide-y divide-gray-200">
                             @forelse($procurements as $item)
                             <tr class="bg-white hover:bg-gray-50 transition-colors">
-                                
-                                {{-- Kolom Barang --}}
                                 <td class="px-6 py-4 whitespace-nowrap align-top">
                                     <div class="flex flex-col">
                                         <span class="block text-sm font-bold text-gray-800 mb-1">{{ $item->item_name }}</span>
@@ -80,15 +70,11 @@
                                         @endif
                                     </div>
                                 </td>
-
-                                {{-- Kolom Qty --}}
                                 <td class="px-6 py-4 whitespace-nowrap text-center align-top">
                                     <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-gray-100 text-gray-800 shadow-sm border border-gray-200">
                                         {{ $item->quantity }} Units
                                     </span>
                                 </td>
-
-                                {{-- Kolom Estimasi & Prioritas --}}
                                 <td class="px-6 py-4 whitespace-nowrap align-top">
                                     <div class="flex flex-col gap-2">
                                         <div class="text-sm font-medium text-gray-800">
@@ -98,8 +84,6 @@
                                                 <span class="text-gray-400 italic">Tanpa Estimasi</span>
                                             @endif
                                         </div>
-                                        
-                                        {{-- Badge Prioritas --}}
                                         <div>
                                             @php
                                                 $prioClass = [
@@ -122,8 +106,6 @@
                                         </div>
                                     </div>
                                 </td>
-
-                                {{-- Kolom Status --}}
                                 <td class="px-6 py-4 whitespace-nowrap text-center align-top">
                                     @php
                                         $statusClass = [
@@ -160,8 +142,6 @@
                             @endforelse
                         </tbody>
                     </table>
-
-                    {{-- Footer Pagination --}}
                     <div class="px-6 py-4 border-t border-gray-200">
                         {{ $procurements->links() }}
                     </div>
@@ -169,13 +149,9 @@
             </div>
         </div>
     </div>
-</div>
-{{-- MODAL FORM (WIDE & COMPACT) --}}
 <div id="modal-add-procurement" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4 transition-opacity">
     
     <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[90vh]">
-        
-        {{-- HEADER --}}
         <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/80 shrink-0">
             <div>
                 <h3 class="text-lg font-bold text-gray-900">Form Pengajuan Pembelian</h3>
@@ -185,12 +161,8 @@
                 <svg class="w-3 h-3" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
             </button>
         </div>
-
-        {{-- PERBAIKAN 1: Tambahkan ID unik pada form --}}
         <form id="form-create-procurement" action="{{ route('it.procurements.store') }}" method="POST" class="flex flex-col flex-1 overflow-hidden">
             @csrf
-            
-            {{-- PERBAIKAN 2: Tampilkan Error Validasi di dalam Modal (Agar ketahuan kalau gagal) --}}
             @if($errors->any())
                 <div class="mx-6 mt-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-lg text-sm">
                     <ul class="list-disc pl-5">
@@ -202,8 +174,6 @@
             @endif
 
             <div class="p-6 overflow-y-auto space-y-6">
-                
-                {{-- BARIS 1 --}}
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="md:col-span-3">
                         <label class="block mb-2 text-sm font-semibold text-gray-900">Nama Barang <span class="text-red-500">*</span></label>
@@ -215,8 +185,6 @@
                         <input type="number" name="ticket_id" value="{{ old('ticket_id') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="105">
                     </div>
                 </div>
-
-                {{-- BARIS 2 --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block mb-2 text-sm font-semibold text-gray-900">Jumlah <span class="text-red-500">*</span></label>
@@ -231,8 +199,6 @@
                         <input type="url" name="link_reference" value="{{ old('link_reference') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="https://...">
                     </div>
                 </div>
-
-                {{-- BARIS 3: Prioritas --}}
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-900">Tingkat Prioritas <span class="text-red-500">*</span></label>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -246,20 +212,14 @@
                         @endforeach
                     </div>
                 </div>
-
-                {{-- BARIS 4: Deskripsi --}}
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-900">Spesifikasi Detail</label>
                     <textarea name="description" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 resize-none">{{ old('description') }}</textarea>
                 </div>
 
             </div>
-
-            {{-- FOOTER --}}
             <div class="flex items-center justify-end gap-3 p-5 border-t border-gray-100 bg-gray-50/80 shrink-0">
                 <button data-modal-hide="modal-add-procurement" type="button" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Batal</button>
-                
-                {{-- PERBAIKAN 3: Gunakan atribut form="ID_FORM" untuk memastikan tombol terhubung --}}
                 <button type="submit" form="form-create-procurement" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition-all transform active:scale-95">
                     Kirim Pengajuan
                 </button>
@@ -267,12 +227,8 @@
         </form>
     </div>
 </div>
-
-{{-- SCRIPT AGAR MODAL TETAP BUKA JIKA ADA ERROR VALIDASI --}}
-@if($errors->any())
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Hapus class hidden agar modal langsung muncul saat reload karena error
         const modal = document.getElementById('modal-add-procurement');
         if(modal) {
             modal.classList.remove('hidden');

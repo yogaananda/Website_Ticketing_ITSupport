@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ConsumableController extends Controller
 {
-    // 1. MENAMPILKAN HALAMAN
     public function index(Request $request)
     {
         $query = Consumable::query();
@@ -18,14 +17,10 @@ class ConsumableController extends Controller
             $query->where('name', 'like', "%{$search}%")
                   ->orWhere('category', 'like', "%{$search}%");
         }
-
         $consumables = $query->latest()->paginate(10);
-
-        // PENTING 1: Di sini panggil NAMA FILE BLADE Anda
         return view('admin_stock_logistik', compact('consumables'));
     }
 
-    // 2. SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
@@ -44,24 +39,16 @@ class ConsumableController extends Controller
             $path = $request->file('image')->store('consumables', 'public');
             $data['image_path'] = $path;
         }
-
         Consumable::create($data);
-
-        // PENTING 2: Di sini panggil NAMA ROUTE (Bukan nama file)
-        // Nama route ini berasal dari web.php (admin. + consumables. + index)
         return redirect()->route('admin.consumables.index')
                          ->with('success', 'Stok berhasil ditambahkan!');
     }
-
-    // 3. UPDATE DATA
     public function update(Request $request, $id)
     {
         $consumable = Consumable::findOrFail($id);
         
-        // ... (Validasi sama seperti store) ...
         $request->validate([
             'name'      => 'required|string|max:255',
-             // ... dst ...
         ]);
 
         $data = $request->except('image');
@@ -75,13 +62,10 @@ class ConsumableController extends Controller
         }
 
         $consumable->update($data);
-
-        // PENTING 3: Redirect ke route admin.consumables.index
         return redirect()->route('admin.consumables.index')
                          ->with('success', 'Data stok berhasil diperbarui!');
     }
 
-    // 4. HAPUS DATA
     public function destroy($id)
     {
         $consumable = Consumable::findOrFail($id);
@@ -91,8 +75,6 @@ class ConsumableController extends Controller
         }
 
         $consumable->delete();
-
-        // PENTING 4: Redirect ke route admin.consumables.index
         return redirect()->route('admin.consumables.index')
                          ->with('success', 'Data stok berhasil dihapus!');
     }

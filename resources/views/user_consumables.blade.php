@@ -5,8 +5,6 @@
 @section('content')
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto space-y-6">
-
-    {{-- HEADER --}}
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
             <h2 class="text-2xl font-bold text-gray-900">Permintaan Barang (ATK)</h2>
@@ -18,8 +16,6 @@
             Minta Barang Baru
         </button>
     </div>
-
-    {{-- TABEL --}}
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
@@ -57,7 +53,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500 italic">
-                            "{{ $req->reason ?? '-' }}" {{-- Panggil REASON --}}
+                            "{{ $req->reason ?? '-' }}"
                         </td>
                     </tr>
                     @empty
@@ -73,8 +69,6 @@
         </div>
     </div>
 </div>
-
-{{-- MODAL FORM --}}
 <div id="modal-request-item" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900/50 backdrop-blur-sm">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -100,7 +94,6 @@
                         <label class="block mb-2 text-sm font-semibold text-gray-900">Jumlah</label>
                         <input type="number" name="amount" min="1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" required>
                     </div>
-                    {{-- Input REASON --}}
                     <div>
                         <label class="block mb-2 text-sm font-semibold text-gray-900">Alasan / Keperluan</label>
                         <textarea name="reason" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: Untuk keperluan meeting..."></textarea>

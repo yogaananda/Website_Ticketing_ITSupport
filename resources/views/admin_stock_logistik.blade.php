@@ -5,16 +5,12 @@
 @section('content')
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-    
-    {{-- HEADER & SEARCH --}}
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <div>
             <h2 class="text-2xl font-bold text-gray-900">Stok Logistik IT</h2>
             <p class="text-sm text-gray-500">Kelola barang habis pakai (Tinta, Kertas, Kabel, dll).</p>
         </div>
-
         <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            {{-- Search Bar --}}
             <form action="{{ route('admin.consumables.index') }}" method="GET" class="relative w-full sm:w-64">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -25,8 +21,6 @@
                     class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500" 
                     placeholder="Cari barang...">
             </form>
-
-            {{-- Tombol Tambah --}}
             <button type="button" data-modal-target="modal-add-consumable" data-modal-toggle="modal-add-consumable" 
                 class="text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center gap-2 shadow-sm transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -34,13 +28,9 @@
             </button>
         </div>
     </div>
-
-    {{-- TABEL DATA --}}
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
-                
-                {{-- THEAD --}}
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-left">Nama Barang</th>
@@ -50,16 +40,11 @@
                         <th scope="col" class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                     </tr>
                 </thead>
-                
-                {{-- TBODY --}}
                 <tbody class="bg-white divide-y divide-gray-100">
                     @forelse($consumables as $item)
                     <tr class="hover:bg-gray-50 transition-colors duration-200">
-                        
-                        {{-- 1. NAMA BARANG --}}
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                {{-- Thumbnail Foto (Opsional) --}}
                                 <div class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
                                     @if($item->image_path)
                                         <img src="{{ asset('storage/' . $item->image_path) }}" class="w-full h-full object-cover">
@@ -73,8 +58,6 @@
                                 </div>
                             </div>
                         </td>
-
-                        {{-- 2. KATEGORI & LOKASI --}}
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex flex-col gap-1">
                                 <span class="inline-flex items-center w-fit px-2 py-0.5 rounded text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
@@ -86,12 +69,9 @@
                                 </div>
                             </div>
                         </td>
-
-                        {{-- 3. STOK (Dengan Logika Warna) --}}
                         <td class="px-6 py-4 text-center whitespace-nowrap">
                             @php
                                 $isLow = $item->stock <= $item->min_stock;
-                                // Merah jika stok sedikit, Hijau jika aman
                                 $stockColor = $isLow ? 'bg-red-100 text-red-800 border-red-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200';
                             @endphp
                             
@@ -105,30 +85,20 @@
                                 </div>
                             @endif
                         </td>
-
-                        {{-- 4. SATUAN --}}
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $item->unit }}
                         </td>
-
-                        {{-- 5. AKSI (Modern Icon Buttons) --}}
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex items-center justify-center gap-2">
-                                
-                                {{-- Tombol Edit (Icon Pencil) --}}
                                 <button type="button" 
                                     data-modal-target="modal-edit-{{ $item->id }}" 
                                     data-modal-toggle="modal-edit-{{ $item->id }}"
                                     class="group p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200"
                                     title="Edit Data">
-                                    
-                                    {{-- Icon Pencil --}}
                                     <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                     </svg>
                                 </button>
-                                
-                                {{-- Tombol Hapus (Icon Trash) --}}
                                 <form action="{{ route('admin.consumables.destroy', $item->id) }}" method="POST" 
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus stok {{ $item->name }}? Data tidak bisa dikembalikan.');"
                                     class="inline-block">
@@ -137,8 +107,6 @@
                                     <button type="submit" 
                                         class="group p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
                                         title="Hapus Data">
-                                        
-                                        {{-- Icon Trash --}}
                                         <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
@@ -158,8 +126,6 @@
                 </tbody>
             </table>
         </div>
-        
-        {{-- PAGINATION --}}
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
                 Showing <span class="font-semibold text-gray-900">{{ $consumables->firstItem() ?? 0 }}</span> 
@@ -172,10 +138,6 @@
         </div>
     </div>
 </div>
-{{-- ========================================== --}}
-{{-- 1. MODAL TAMBAH STOK (TANPA BLUR) --}}
-{{-- ========================================== --}}
-{{-- Perhatikan class di bawah: 'backdrop-blur-sm' sudah dihapus --}}
 <div id="modal-add-consumable" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900/30">
     <div class="relative p-4 w-full max-w-lg max-h-full">
         <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">

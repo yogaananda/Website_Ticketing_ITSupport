@@ -11,8 +11,6 @@ class AssetLoan extends Model
 
     protected $table = 'asset_loans';
     protected $guarded = ['id'];
-
-    // PENTING: Casting agar tanggal dianggap sebagai object Carbon (bisa diformat)
     protected $casts = [
         'loan_date' => 'datetime',
         'due_date'  => 'datetime',

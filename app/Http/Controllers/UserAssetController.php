@@ -9,25 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class UserAssetController extends Controller
 {
-    // 1. TAMPILKAN HALAMAN (Index)
     public function index()
     {
-        // Ambil data peminjaman milik user yang login
         $myLoans = AssetLoan::with('asset')
                     ->where('user_id', Auth::id())
                     ->latest()
                     ->get();
 
-        // Ambil aset yang statusnya 'ready' untuk isi dropdown modal
         $availableAssets = Asset::where('status', 'ready')
                           ->where('condition', 'good')
                           ->get();
 
-        // PENTING: Ini memanggil file 'resources/views/user_assets.blade.php'
         return view('user_assets', compact('myLoans', 'availableAssets'));
     }
 
-    // 2. PROSES PENGAJUAN (Store)
     public function store(Request $request)
     {
         $request->validate([

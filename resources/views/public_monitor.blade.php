@@ -5,15 +5,10 @@
 @section('content')
 
 <div class="max-w-[85rem] px-4 py-8 sm:px-6 lg:px-8 mx-auto">
-
-    {{-- 1. HEADER & PENGUMUMAN MASSAL (RUNNING TEXT/BANNER) --}}
     <div class="mb-8 text-center">
         <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">IT SERVICE MONITOR</h2>
         <p class="text-gray-500 mt-1">Pantau status pengerjaan tiket secara Realtime.</p>
     </div>
-
-    {{-- ALERT GANGGUAN (Hanya muncul jika ada - Bisa dibuat dinamis nanti) --}}
-    {{-- Contoh Hardcode dulu untuk visualisasi --}}
     <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-r-lg shadow-sm">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -30,8 +25,6 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-        {{-- 2. KOLOM KIRI: SEDANG DIKERJAKAN (IN PROGRESS) --}}
         <div class="bg-white border border-blue-100 rounded-2xl shadow-lg overflow-hidden relative">
             <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
                 <h3 class="text-lg font-bold flex items-center gap-2">
@@ -54,7 +47,6 @@
                             </div>
                         </div>
                         <div class="text-right">
-                             {{-- Menampilkan nama Teknisi (jika ada relasi teknisi) --}}
                              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 Teknisi OTW
                             </span>
@@ -67,12 +59,8 @@
                     </div>
                 @endforelse
             </div>
-            
-            {{-- Hiasan Background --}}
             <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-400 rounded-full opacity-10 blur-xl"></div>
         </div>
-
-        {{-- 3. KOLOM KANAN: ANTRIAN MENUNGGU (OPEN) --}}
         <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <div class="bg-gray-50 p-4 border-b border-gray-100 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-gray-700 flex items-center gap-2">
@@ -108,8 +96,6 @@
         </div>
 
     </div>
-
-    {{-- 4. FOOTER STATS --}}
     <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-green-50 rounded-xl p-4 flex items-center justify-center border border-green-100">
             <div class="text-center">
@@ -121,9 +107,7 @@
 
 </div>
 
-{{-- SCRIPT AUTO REFRESH --}}
 <script>
-    // Refresh halaman setiap 60 detik agar data selalu realtime seperti papan bandara
     setTimeout(function(){
        window.location.reload(1);
     }, 60000);

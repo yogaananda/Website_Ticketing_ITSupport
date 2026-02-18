@@ -9,28 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    /**
-     * Menampilkan halaman Manajemen User
-     */
     public function index()
     {
-        // Proteksi tambahan: Pastikan hanya admin yang bisa masuk
         if (Auth::user()->role !== 'admin') {
             abort(403, 'Akses tidak diizinkan.');
         }
 
-        // Mengambil semua user untuk ditampilkan di tabel
         $users = User::latest()->get();
 
         return view('log_user', compact('users'));
     }
 
-    /**
-     * Menyimpan User Baru ke Database
-     */
     public function store(Request $request)
     {
-        // 1. Validasi Input
+
         $request->validate([
             'username'  => 'required|string|unique:users,username|max:255',
             'full_name' => 'required|string|max:255',
@@ -40,17 +32,14 @@ class UserController extends Controller
             'password'  => 'required|string|min:8',
         ]);
 
-        // 2. Simpan Data
         User::create([
             'username'  => $request->username,
             'full_name' => $request->full_name,
             'email'     => $request->email,
             'division'  => $request->division,
             'role'      => $request->role,
-            'password'  => Hash::make($request->password), // Enkripsi password
+            'password'  => Hash::make($request->password), 
         ]);
-
-        // 3. Kembali dengan pesan sukses
         return redirect()->route('admin.log_user')->with('success', 'User baru berhasil ditambahkan!');
     }
 }

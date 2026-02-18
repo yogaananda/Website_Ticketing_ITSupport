@@ -9,7 +9,6 @@ class MaintenanceSchedule extends Model
 {
     use HasFactory;
 
-    // Sesuaikan dengan nama tabel migrasi Anda
     protected $table = 'maintenance_schedules';
 
     protected $fillable = [
@@ -26,13 +25,11 @@ class MaintenanceSchedule extends Model
         'completion_date' => 'date',
     ];
 
-    // Relasi ke Aset
     public function asset()
     {
         return $this->belongsTo(Asset::class, 'asset_id');
     }
 
-    // Relasi ke Teknisi (User)
     public function technician()
     {
         return $this->belongsTo(User::class, 'technician_id');
