@@ -26,8 +26,6 @@ class DailyActivitySeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         $now = Carbon::now();
-
-        // Data Realistis untuk Seeder
         $ticketScenarios = [
             ['title' => 'WiFi Lantai 2 Putus-putus', 'desc' => 'Koneksi WiFi di area marketing sering terputus saat jam makan siang.', 'cat' => 'Jaringan'],
             ['title' => 'Printer Macet (Paper Jam)', 'desc' => 'Printer Epson di Finance macet total, sudah dicoba tarik kertas tetap error.', 'cat' => 'Hardware'],
@@ -82,7 +80,6 @@ class DailyActivitySeeder extends Seeder
             'Review Kontrak Lisensi Software',
         ];
 
-        // Ambil data referensi
         $users = User::all();
         $itSupports = User::where('role', 'it_support')->get();
         if ($itSupports->isEmpty()) {
@@ -113,7 +110,7 @@ class DailyActivitySeeder extends Seeder
                 $randomTime = $date->copy()->setHour(rand(8, 17))->setMinute(rand(0, 59));
 
                 switch ($activityType) {
-                    case 1: // Ticket
+                    case 1:
                         $scenario = $faker->randomElement($ticketScenarios);
                         $category = Category::where('name', 'LIKE', '%' . $scenario['cat'] . '%')->first() ?: $categories->random();
                         
@@ -132,7 +129,7 @@ class DailyActivitySeeder extends Seeder
                         ]);
                         break;
 
-                    case 2: // Asset Loan
+                    case 2:
                         DB::table('asset_loans')->insert([
                             'user_id' => $users->random()->id,
                             'asset_id' => $assets->random()->id,
@@ -147,7 +144,7 @@ class DailyActivitySeeder extends Seeder
                         ]);
                         break;
 
-                    case 3: // Consumable Request
+                    case 3:
                         DB::table('consumable_requests')->insert([
                             'user_id' => $users->random()->id,
                             'consumable_id' => $consumables->random()->id,
@@ -160,7 +157,7 @@ class DailyActivitySeeder extends Seeder
                         ]);
                         break;
 
-                    case 4: // Procurement
+                    case 4:
                         DB::table('procurements')->insert([
                             'user_id' => $users->random()->id,
                             'ticket_id' => null,
@@ -176,7 +173,7 @@ class DailyActivitySeeder extends Seeder
                         ]);
                         break;
 
-                    case 5: // Maintenance Schedule
+                    case 5:
                         DB::table('maintenance_schedules')->insert([
                             'asset_id' => $assets->random()->id,
                             'technician_id' => $itSupports->random()->id,
@@ -189,7 +186,7 @@ class DailyActivitySeeder extends Seeder
                         ]);
                         break;
 
-                    case 6: // Appointment
+                    case 6:
                         Appointment::create([
                             'title' => $faker->randomElement($appointmentTitles),
                             'date' => $date->format('Y-m-d'),
