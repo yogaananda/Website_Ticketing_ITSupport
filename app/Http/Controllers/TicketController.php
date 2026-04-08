@@ -19,9 +19,19 @@ class TicketController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
 
+        $ticketCode = 'TKT-' . date('YmdHis');
+        
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('ticket_images', 'public');
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            
+            $userName = Auth::user()->full_name ?? Auth::user()->username ?? 'User';
+            $cleanUserName = preg_replace('/[^A-Za-z0-9\-]/', '_', $userName);
+            $dateStr = date('Y-m-d');
+            
+            $fileName = "{$ticketCode}-{$cleanUserName}-{$dateStr}.{$extension}";
+            $imagePath = $file->storeAs('ticket_images', $fileName, 'public');
         }
 
         $ticket = Ticket::create([
@@ -31,8 +41,8 @@ class TicketController extends Controller
             'category_id' => $request->category_id,
             'priority' => $request->priority,
             'status' => 'open',
-            'image' => $imagePath,
-            'ticket_code' => 'TKT-' . date('YmdHis'),
+            'image_path' => $imagePath,
+            'ticket_code' => $ticketCode,
             'queue_number' => Ticket::whereDate('created_at', now())->count() + 1,
         ]);
 

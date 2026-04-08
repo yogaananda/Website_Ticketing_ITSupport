@@ -227,14 +227,5 @@
         </form>
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const modal = document.getElementById('modal-add-procurement');
-        if(modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-    });
-</script>
-@endif
+
 @endsection

@@ -132,75 +132,117 @@
                             class="font-medium text-blue-600 hover:underline">
                         Detail
                     </button>
-                    <div id="modal-detail-{{ $ticket->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full text-left">
-                        <div class="relative p-4 w-full max-w-2xl max-h-full">
-                            <div class="relative bg-white border border-gray-200 rounded-lg shadow-lg">
-                                <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 rounded-t">
-                                    <h3 class="text-lg font-semibold text-gray-900">
-                                        Detail Laporan Barang
-                                    </h3>
-                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="modal-detail-{{ $ticket->id }}">
+                    <div id="modal-detail-{{ $ticket->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full text-left whitespace-normal">
+                        <div class="relative p-4 w-full max-w-4xl max-h-full">
+                            <div class="relative bg-white border border-gray-200 rounded-xl shadow-2xl">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-100 rounded-t bg-gray-50/50">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-900">
+                                            Laporan #{{ $ticket->ticket_code }}
+                                        </h3>
+                                        <p class="text-xs text-gray-500 mt-1">Status dan riwayat laporan Anda</p>
+                                    </div>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors" data-modal-hide="modal-detail-{{ $ticket->id }}">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
-                                        <span class="sr-only">Close modal</span>
                                     </button>
                                 </div>
                                 <div class="p-4 md:p-6 space-y-6">
-                                    <div class="flex justify-between items-start border-b border-dashed border-gray-200 pb-4">
+                                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-dashed border-gray-200 pb-6">
                                         <div>
-                                            <h3 class="text-xl font-bold text-gray-900">#{{ $ticket->ticket_code }} - {{ $ticket->title }}</h3>
-                                            <p class="text-sm text-gray-500">Dilaporkan pada: {{ $ticket->created_at->format('d M Y') }}</p>
+                                            <h3 class="text-xl font-bold text-gray-900">{{ $ticket->title }}</h3>
+                                            <div class="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                                <span>Anda melaporkan pada: <span class="font-medium text-gray-700">{{ $ticket->created_at->format('d M Y, H:i') }} WIB</span></span>
+                                            </div>
                                         </div>
-                                        
-                                        @if($ticket->status == 'open')
-                                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full border border-red-300">Open</span>
-                                        @elseif($ticket->status == 'in_progress')
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full border border-yellow-300">Proses</span>
-                                        @else
-                                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full border border-green-300">Selesai</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <h4 class="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Deskripsi Kerusakan:</h4>
-                                            <p class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">
-                                                {{ $ticket->description }}
-                                            </p>
-                                            
-                                            <h4 class="font-semibold text-gray-900 mt-6 mb-2 text-sm uppercase tracking-wider">Foto Bukti:</h4>
-                                            @if($ticket->image)
-                                                <img src="{{ asset('storage/' . $ticket->image) }}" class="rounded-lg border border-gray-200 w-full object-cover h-44 shadow-sm">
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            @if($ticket->status == 'open')
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 shadow-sm">
+                                                    <svg class="size-2.5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg> Menunggu Penanganan
+                                                </span>
+                                            @elseif($ticket->status == 'in_progress')
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200 shadow-sm">
+                                                    <svg class="size-2.5 fill-current animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/><path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/></svg> Sedang Dikerjakan
+                                                </span>
                                             @else
-                                                <div class="w-full h-44 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 text-sm italic">
-                                                    Tidak ada foto bukti
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-sm">
+                                                    <svg class="size-2.5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg> Selesai
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                                Deskripsi Anda
+                                            </h4>
+                                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm text-gray-700 leading-relaxed">
+                                                {{ $ticket->description }}
+                                            </div>
+                                            
+                                            <h4 class="font-bold text-gray-900 mt-8 mb-3 flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                Bukti Foto
+                                            </h4>
+                                            @if($ticket->image_path)
+                                                <a href="{{ asset('storage/' . $ticket->image_path) }}" target="_blank" class="block w-full relative overflow-hidden rounded-xl border border-gray-200 group shadow-sm">
+                                                    <img src="{{ asset('storage/' . $ticket->image_path) }}" class="w-full h-auto object-cover transition-transform duration-300 hover:scale-[1.02]">
+                                                </a>
+                                            @else
+                                                <div class="w-full h-32 bg-gray-50 rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 text-sm">
+                                                    <svg class="w-8 h-8 mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                    Tidak ada lampiran foto
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="md:border-s md:border-gray-100 md:ps-6">
-                                            <h4 class="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Log Aktivitas:</h4>
-                                            <ol class="relative border-s border-gray-200 ml-2">                  
-                                                <li class="mb-6 ms-4">
-                                                    <div class="absolute w-3 h-3 bg-gray-400 rounded-full mt-1.5 -start-1.5 border border-white"></div>
-                                                    <time class="mb-1 text-xs font-normal leading-none text-gray-400">{{ $ticket->created_at->format('d M, H:i') }}</time>
-                                                    <h3 class="text-sm font-semibold text-gray-900">Laporan Diterima</h3>
-                                                    <p class="text-xs text-gray-500">Tiket masuk ke sistem.</p>
-                                                </li>
-                                                @foreach($ticket->comments ?? [] as $comment)
-                                                <li class="mb-6 ms-4">
-                                                    @php $dotColor = str_contains(strtoupper($comment->message), 'SELESAI') ? 'bg-green-500' : 'bg-blue-500'; @endphp
-                                                    <div class="absolute w-3 h-3 {{ $dotColor }} rounded-full mt-1.5 -start-1.5 border border-white"></div>
-                                                    <time class="mb-1 text-xs font-normal leading-none text-gray-400">{{ $comment->created_at->format('d M, H:i') }}</time>
-                                                    <h3 class="text-sm font-semibold text-gray-900">{{ $comment->user->full_name ?? 'Teknisi' }}</h3>
-                                                    <div class="text-xs text-gray-600 bg-gray-50 p-2 rounded mt-1 border border-gray-100">{{ $comment->message }}</div>
-                                                </li>
-                                                @endforeach
-                                            </ol>
+                                        <div class="md:border-s md:border-gray-100 md:ps-8">
+                                            <h4 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                Pesan dari Teknisi / Sistem
+                                            </h4>
+                                            <div class="h-[300px] overflow-y-auto pe-2 scrollbar-thin scrollbar-thumb-gray-200">
+                                                <ol class="relative border-s border-gray-200 ml-2 mt-1">
+                                                    <li class="mb-8 ms-6">
+                                                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-4 ring-white">
+                                                            <svg class="w-2.5 h-2.5 text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/></svg>
+                                                        </span>
+                                                        <h3 class="flex items-center mb-1 text-sm font-semibold text-gray-900">Laporan Masuk</h3>
+                                                        <time class="block mb-2 text-xs font-normal leading-none text-gray-400">{{ $ticket->created_at->format('d M, H:i') }}</time>
+                                                        <p class="text-xs text-gray-500">Tiket masuk menunggu antrean teknisi IT.</p>
+                                                    </li>
+                                                    @forelse($ticket->comments ?? [] as $comment)
+                                                        <li class="mb-8 ms-6 text-left">
+                                                            @php
+                                                                $msgUpper = strtoupper($comment->message);
+                                                                $isDone = str_contains($msgUpper, 'SELESAI');
+                                                                $dotBg = $isDone ? 'bg-green-100' : 'bg-gray-100';
+                                                                $dotIconColor = $isDone ? 'text-green-800' : 'text-gray-600';
+                                                            @endphp
+                                                            <span class="absolute flex items-center justify-center w-6 h-6 {{ $dotBg }} rounded-full -start-3 ring-4 ring-white shadow-sm">
+                                                                @if($isDone)
+                                                                    <svg class="w-3 h-3 {{ $dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                                @else
+                                                                    <svg class="w-3 h-3 {{ $dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                                                @endif
+                                                            </span>
+                                                            <h3 class="mb-1 text-sm font-bold text-gray-900">{{ $comment->user->full_name ?? 'Tim Support IT' }}</h3>
+                                                            <time class="block mb-2 text-xs font-normal leading-none text-gray-400">{{ $comment->created_at->format('d M, H:i') }}</time>
+                                                            <div class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-200 shadow-sm leading-relaxed relative mt-1">
+                                                                <div class="absolute w-2 h-2 bg-gray-50 border-t border-l border-gray-200 transform -translate-y-1/2 rotate-45 -left-1 top-4"></div>
+                                                                {{ $comment->message }}
+                                                            </div>
+                                                        </li>
+                                                    @empty
+                                                    @endforelse
+                                                </ol>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-                                    <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="ms-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors">
-                                        Tutup Detail
+                                <div class="flex items-center justify-end p-4 md:p-5 border-t border-gray-100 rounded-b bg-gray-50/50">
+                                    <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                                         Selesai / Tutup Detail
                                     </button>
                                 </div>
                             </div>

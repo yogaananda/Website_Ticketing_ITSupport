@@ -16,7 +16,7 @@ class Ticket extends Model
         'assigned_to', 
         'title', 
         'description', 
-        'image', 
+        'image_path', 
         'priority', 
         'status', 
         'queue_number'

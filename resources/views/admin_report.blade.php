@@ -146,10 +146,10 @@
                                                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                                         Bukti Foto
                                                     </h4>
-                                                    @if($ticket->image)
-                                                        <div class="relative group">
-                                                            <img src="{{ asset('storage/' . $ticket->image) }}" class="rounded-xl border border-gray-200 w-full h-auto object-cover shadow-sm transition-transform hover:scale-[1.02]">
-                                                        </div>
+                                                    @if($ticket->image_path)
+                                                        <a href="{{ asset('storage/' . $ticket->image_path) }}" target="_blank" class="block w-full relative overflow-hidden rounded-xl border border-gray-200 group shadow-sm">
+                                                            <img src="{{ asset('storage/' . $ticket->image_path) }}" class="w-full h-auto object-cover transition-transform duration-300 hover:scale-[1.02]">
+                                                        </a>
                                                     @else
                                                         <div class="w-full h-32 bg-gray-50 rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 text-sm">
                                                             <svg class="w-8 h-8 mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -206,10 +206,10 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center justify-end p-4 md:p-5 border-t border-gray-100 rounded-b bg-gray-50/50">
-                                            <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="text-gray-700 bg-white border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                                                Tutup
-                                            </button>
-                                        </div>
+                                        <button data-modal-hide="modal-detail-{{ $ticket->id }}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                                            Selesai / Tutup Detail
+                                        </button>
+                                    </div>
 
                                     </div>
                                 </div>
