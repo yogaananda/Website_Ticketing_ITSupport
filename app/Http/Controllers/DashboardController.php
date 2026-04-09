@@ -90,8 +90,6 @@ class DashboardController extends Controller
         $newTickets = Ticket::where('status', 'open')->count();
         $onProgress = Ticket::where('status', 'in_progress')->count();
         $completedToday = Ticket::where('status', 'resolved')->whereDate('updated_at', Carbon::today())->count();
-
-        // Ambil personel IT Support lainnya untuk fitur Transfer Tiket
         $otherItUsers = User::where('role', 'it_support')
                             ->where('id', '!=', Auth::id())
                             ->get();
