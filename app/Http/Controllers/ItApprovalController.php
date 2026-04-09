@@ -16,10 +16,31 @@ class ItApprovalController extends Controller
         $assetLoans = AssetLoan::with(['user', 'asset'])
             ->orderBy('created_at', 'desc')
             ->get();
+            
+        $assetLoans->transform(function($loan) {
+            $loan->badgeBg = match($loan->status) {
+                'pending' => 'bg-amber-100 text-amber-800 border-amber-200',
+                'active' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'returned' => 'bg-blue-100 text-blue-800 border-blue-200',
+                'rejected' => 'bg-red-100 text-red-800 border-red-200',
+                default => 'bg-gray-100 text-gray-800 border-gray-200',
+            };
+            return $loan;
+        });
 
         $consumableRequests = ConsumableRequest::with(['user', 'consumable'])
             ->orderBy('created_at', 'desc')
             ->get();
+            
+        $consumableRequests->transform(function($req) {
+            $req->badgeBg = match($req->status) {
+                'pending' => 'bg-amber-100 text-amber-800 border-amber-200',
+                'approved' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'rejected' => 'bg-red-100 text-red-800 border-red-200',
+                default => 'bg-gray-100 text-gray-800 border-gray-200',
+            };
+            return $req;
+        });
 
         // LOGIC PENENTUAN TAB & BADGE (Dari permintaan Anda)
         $activeTab = request()->query('tab', 'assets');

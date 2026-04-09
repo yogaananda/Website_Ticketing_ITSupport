@@ -15,7 +15,9 @@ class UserController extends Controller
             abort(403, 'Akses tidak diizinkan.');
         }
 
-        $users = User::latest()->get();
+        $users = User::withCount(['it_tickets' => function ($query) {
+            $query->whereIn('status', ['open', 'in_progress']);
+        }])->latest()->get();
 
         return view('log_user', compact('users'));
     }

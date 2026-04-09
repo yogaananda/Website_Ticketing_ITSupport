@@ -27,24 +27,8 @@
                     <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 @endif
                 <div class="absolute top-3 right-3">
-                    @php
-                        $statusStyles = [
-                            'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
-                            'active' => 'bg-blue-100 text-blue-800 border-blue-200',
-                            'returned' => 'bg-gray-100 text-gray-800 border-gray-200',
-                            'overdue' => 'bg-red-100 text-red-800 border-red-200',
-                            'rejected' => 'bg-red-50 text-red-600 border-red-100',
-                        ];
-                        $statusLabel = [
-                            'pending' => 'Menunggu Approval',
-                            'active' => 'Sedang Dipinjam',
-                            'returned' => 'Sudah Dikembalikan',
-                            'overdue' => 'Terlambat',
-                            'rejected' => 'Ditolak',
-                        ];
-                    @endphp
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border shadow-sm {{ $statusStyles[$loan->status] }}">
-                        {{ $statusLabel[$loan->status] }}
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border shadow-sm {{ $loan->statusColor }}">
+                        {{ $loan->statusLabel }}
                     </span>
                 </div>
             </div>

@@ -190,4 +190,109 @@
   <script src="{{ asset('js/main.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
+  
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+  <style>
+      .ts-wrapper { 
+          width: 100%; 
+          padding: 0 !important; 
+          border: none !important; 
+          background: transparent !important; 
+          box-shadow: none !important; 
+      }
+      .ts-control {
+          border: 1px solid #d1d5db !important;
+          border-radius: 0.75rem !important; 
+          background-color: #f9fafb !important;
+          padding: 0.75rem 1rem !important;
+          font-size: 0.875rem !important;
+          color: #111827 !important;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+          min-height: 3.125rem !important;
+          display: flex;
+          align-items: center;
+          transition: all 0.2s ease-in-out;
+      }
+      .ts-control.focus {
+          border-color: #3f83f8 !important;
+          background-color: #ffffff !important;
+          box-shadow: 0 0 0 4px rgba(63, 131, 248, 0.2) !important;
+      }
+      
+      .ts-control::after {
+          content: '' !important;
+          position: absolute !important;
+          border-color: #9ca3af transparent transparent transparent !important;
+          border-style: solid !important;
+          border-width: 5px 5px 0 5px !important;
+          right: 1rem !important;
+          top: 50% !important;
+          margin-top: -2.5px !important; 
+          transition: transform 0.2s ease;
+      }
+      .ts-control.dropdown-active::after {
+          transform: rotate(180deg);
+          border-color: #3f83f8 transparent transparent transparent !important;
+      }
+
+      .ts-dropdown {
+          border-radius: 0.75rem !important;
+          border: 1px solid #e5e7eb !important;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+          overflow: hidden;
+          margin-top: 0.4rem !important;
+          background-color: #ffffff !important;
+          padding: 0.5rem 0 !important;
+          animation: slideDown 0.2s ease-out forwards;
+          transform-origin: top;
+      }
+
+      @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-5px) scaleY(0.95); }
+          to { opacity: 1; transform: translateY(0) scaleY(1); }
+      }
+
+      .ts-dropdown .option {
+          padding: 0.75rem 1rem !important;
+          font-size: 0.875rem !important;
+          color: #374151 !important;
+          transition: all 0.15s ease;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+      }
+      .ts-dropdown .option:not(.active):hover {
+          background-color: #f3f4f6 !important;
+          color: #111827 !important;
+      }
+      .ts-dropdown .active {
+          background-color: #ebf5ff !important;
+          color: #1d4ed8 !important;
+          font-weight: 600 !important;
+          position: relative;
+      }
+      .ts-dropdown .active::after {
+          content: '✓';
+          position: absolute;
+          right: 1rem;
+          color: #1d4ed8;
+          font-weight: bold;
+      }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          document.querySelectorAll('select').forEach((el) => {
+              new TomSelect(el, {
+                  create: false,
+                  controlInput: null, 
+                  sortField: {
+                      field: "text",
+                      direction: "asc"
+                  }
+              });
+          });
+      });
+  </script>
 </html>

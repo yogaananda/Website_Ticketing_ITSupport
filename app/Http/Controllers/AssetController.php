@@ -21,6 +21,17 @@ class AssetController extends Controller
         }
 
         $assets = $query->latest()->paginate(10);
+        
+        $assets->getCollection()->transform(function($asset) {
+            $asset->statusColor = match($asset->status) {
+                'ready' => 'bg-green-100 text-green-800',
+                'in_use' => 'bg-blue-100 text-blue-800',
+                'lost' => 'bg-red-100 text-red-800',
+                default => 'bg-gray-100 text-gray-800'
+            };
+            return $asset;
+        });
+
         $users = User::all(); 
 
         return view('admin_assets', compact('assets', 'users'));

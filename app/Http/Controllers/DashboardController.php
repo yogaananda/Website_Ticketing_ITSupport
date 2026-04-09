@@ -19,7 +19,17 @@ class DashboardController extends Controller
         $role = Auth::user()->role;
         $globalData = $this->getGlobalNotifs($role);
 
-        $tickets = Ticket::where('user_id', $userId)->with(['technician', 'category'])->latest()->paginate(5);
+        $tickets = Ticket::where('user_id', $userId)->with(['technician', 'category', 'comments.user'])->latest()->paginate(5);
+        $tickets->getCollection()->transform(function($ticket) {
+            $ticket->comments->transform(function($comment) {
+                $msgUpper = strtoupper($comment->message);
+                $isDone = str_contains($msgUpper, 'SELESAI');
+                $comment->dotBg = $isDone ? 'bg-green-100' : 'bg-gray-100';
+                $comment->dotIconColor = $isDone ? 'text-green-800' : 'text-gray-600';
+                return $comment;
+            });
+            return $ticket;
+        });
         $activeTickets = Ticket::where('user_id', $userId)->whereIn('status', ['open', 'in_progress'])->count();
         $resolvedTickets = Ticket::where('user_id', $userId)->whereIn('status', ['resolved', 'closed'])->count();
         $globalQueue = Ticket::where('status', 'open')->count();
@@ -32,7 +42,7 @@ class DashboardController extends Controller
     
     public function it(Request $request)
     {
-        $query = Ticket::with(['user', 'category', 'technician'])->latest();
+        $query = Ticket::with(['user', 'category', 'technician', 'comments.user'])->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -57,6 +67,19 @@ class DashboardController extends Controller
         }
 
         $tickets = $query->paginate(10)->withQueryString();
+        $tickets->getCollection()->transform(function($ticket) {
+            $ticket->comments->transform(function($comment) {
+                $msgUpper = strtoupper($comment->message);
+                $isDone = str_contains($msgUpper, 'SELESAI');
+                $isReturned = str_contains($msgUpper, 'DIKEMBALIKAN');
+                $comment->dotBg = 'bg-gray-100';
+                $comment->dotIconColor = 'text-gray-600';
+                if($isDone) { $comment->dotBg = 'bg-green-100'; $comment->dotIconColor = 'text-green-800'; }
+                elseif($isReturned) { $comment->dotBg = 'bg-orange-100'; $comment->dotIconColor = 'text-orange-800'; }
+                return $comment;
+            });
+            return $ticket;
+        });
 
         $urgent = Ticket::where('priority', 'high')->whereIn('status', ['open', 'in_progress'])->count();
         $newTickets = Ticket::where('status', 'open')->count();
@@ -118,7 +141,7 @@ class DashboardController extends Controller
 
     public function report(Request $request)
     {
-        $query = Ticket::with(['user', 'category', 'technician'])->latest();
+        $query = Ticket::with(['user', 'category', 'technician', 'comments.user'])->latest();
 
         if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
@@ -135,6 +158,15 @@ class DashboardController extends Controller
         }
 
         $tickets = $query->paginate(10)->withQueryString();
+        $tickets->getCollection()->transform(function($ticket) {
+            $ticket->comments->transform(function($comment) {
+                $isDone = str_contains(strtoupper($comment->message), 'SELESAI');
+                $comment->dotBg = $isDone ? 'bg-green-100' : 'bg-gray-100';
+                $comment->dotIconColor = $isDone ? 'text-green-800' : 'text-gray-600';
+                return $comment;
+            });
+            return $ticket;
+        });
 
         return view('admin_report', compact('tickets'));
     }

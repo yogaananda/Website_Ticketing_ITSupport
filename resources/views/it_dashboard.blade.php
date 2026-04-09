@@ -331,22 +331,13 @@
                                                         </li>
                                                         @forelse($ticket->comments ?? [] as $comment)
                                                             <li class="mb-8 ms-6 text-left">
-                                                                @php
-                                                                    $msgUpper = strtoupper($comment->message);
-                                                                    $isDone = str_contains($msgUpper, 'SELESAI');
-                                                                    $isReturned = str_contains($msgUpper, 'DIKEMBALIKAN');
-                                                                    $dotBg = 'bg-gray-100';
-                                                                    $dotIconColor = 'text-gray-600';
-                                                                    if($isDone) { $dotBg = 'bg-green-100'; $dotIconColor = 'text-green-800'; }
-                                                                    elseif($isReturned) { $dotBg = 'bg-orange-100'; $dotIconColor = 'text-orange-800'; }
-                                                                @endphp
-                                                                <span class="absolute flex items-center justify-center w-6 h-6 {{ $dotBg }} rounded-full -start-3 ring-4 ring-white shadow-sm">
-                                                                    @if($isDone)
-                                                                        <svg class="w-3 h-3 {{ $dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                                                    @elseif($isReturned)
-                                                                        <svg class="w-3 h-3 {{ $dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+                                                                <span class="absolute flex items-center justify-center w-6 h-6 {{ $comment->dotBg }} rounded-full -start-3 ring-4 ring-white shadow-sm">
+                                                                    @if($comment->dotBg == 'bg-green-100')
+                                                                        <svg class="w-3 h-3 {{ $comment->dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                                    @elseif($comment->dotBg == 'bg-orange-100')
+                                                                        <svg class="w-3 h-3 {{ $comment->dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
                                                                     @else
-                                                                        <svg class="w-3 h-3 {{ $dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                                                        <svg class="w-3 h-3 {{ $comment->dotIconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                                                                     @endif
                                                                 </span>
                                                                 <h3 class="mb-1 text-sm font-bold text-gray-900">{{ $comment->user->full_name ?? 'Teknisi / Sistem' }}</h3>

@@ -70,18 +70,13 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center whitespace-nowrap">
-                            @php
-                                $isLow = $item->stock <= $item->min_stock;
-                                $stockColor = $isLow ? 'bg-red-100 text-red-800 border-red-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200';
-                            @endphp
-                            
-                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-bold border shadow-sm {{ $stockColor }}">
+                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-bold border shadow-sm {{ $item->statusColor }}">
                                 {{ $item->stock }}
                             </span>
                             
-                            @if($isLow)
+                            @if($item->stock <= $item->min_stock)
                                 <div class="text-[10px] text-red-500 mt-1 font-medium animate-pulse">
-                                    Stok Menipis!
+                                    {{ $item->stock == 0 ? 'Stok Habis!' : 'Stok Menipis!' }}
                                 </div>
                             @endif
                         </td>

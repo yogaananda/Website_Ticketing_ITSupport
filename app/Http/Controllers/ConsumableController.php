@@ -18,6 +18,21 @@ class ConsumableController extends Controller
                   ->orWhere('category', 'like', "%{$search}%");
         }
         $consumables = $query->latest()->paginate(10);
+
+        $consumables->getCollection()->transform(function($item) {
+            if ($item->stock == 0) {
+                $item->statusColor = 'bg-red-100 text-red-800 border-red-200';
+                $item->statusLabel = 'Habis';
+            } elseif ($item->stock <= $item->min_stock) {
+                $item->statusColor = 'bg-amber-100 text-amber-800 border-amber-200';
+                $item->statusLabel = 'Menipis';
+            } else {
+                $item->statusColor = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+                $item->statusLabel = 'Aman';
+            }
+            return $item;
+        });
+
         return view('admin_stock_logistik', compact('consumables'));
     }
 

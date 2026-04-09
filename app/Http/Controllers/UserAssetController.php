@@ -16,6 +16,27 @@ class UserAssetController extends Controller
                     ->latest()
                     ->get();
 
+        $myLoans->transform(function($loan) {
+            $loan->statusColor = match($loan->status) {
+                'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                'active' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'returned' => 'bg-gray-100 text-gray-800 border-gray-200',
+                'rejected' => 'bg-red-100 text-red-800 border-red-200',
+                'overdue' => 'bg-red-100 text-red-800 border-red-200 font-bold',
+                default => 'bg-gray-100 text-gray-800'
+            };
+
+            $loan->statusLabel = match($loan->status) {
+                'pending' => 'Menunggu Approval',
+                'active' => 'Aktif Dipinjam',
+                'returned' => 'Selesai Dikembalikan',
+                'rejected' => 'Ditolak',
+                'overdue' => 'Terlambat Dikembalikan!',
+                default => ucfirst($loan->status)
+            };
+            return $loan;
+        });
+
         $availableAssets = Asset::where('status', 'ready')
                           ->where('condition', 'good')
                           ->get();

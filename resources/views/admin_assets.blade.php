@@ -60,18 +60,13 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex flex-col gap-2">
                                 @php
-                                    $statusClasses = [
-                                        'ready' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
-                                        'in_use' => 'bg-blue-100 text-blue-800 border-blue-200',
-                                        'lost' => 'bg-red-100 text-red-800 border-red-200'
-                                    ];
                                     $statusLabel = [
                                         'ready' => 'Tersedia',
                                         'in_use' => 'Digunakan',
                                         'lost' => 'Hilang'
                                     ];
                                 @endphp
-                                <span class="w-fit px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase {{ $statusClasses[$item->status] }}">
+                                <span class="w-fit px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase {{ $item->statusColor }}">
                                     {{ $statusLabel[$item->status] ?? $item->status }}
                                 </span>
                                 <div class="flex items-center gap-1.5 text-xs font-medium text-gray-600">

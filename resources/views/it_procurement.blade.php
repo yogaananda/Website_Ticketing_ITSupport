@@ -85,44 +85,16 @@
                                             @endif
                                         </div>
                                         <div>
-                                            @php
-                                                $prioClass = [
-                                                    'low'      => 'bg-gray-100 text-gray-600 border-gray-200',
-                                                    'medium'   => 'bg-blue-50 text-blue-600 border-blue-100',
-                                                    'high'     => 'bg-orange-50 text-orange-600 border-orange-100',
-                                                    'critical' => 'bg-red-50 text-red-600 border-red-100 font-bold',
-                                                ];
-                                                $prioLabel = [
-                                                    'low'      => 'Low Priority',
-                                                    'medium'   => 'Medium Priority',
-                                                    'high'     => 'High Priority',
-                                                    'critical' => 'Critical',
-                                                ];
-                                            @endphp
-                                            <span class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-md text-[10px] uppercase tracking-wide border {{ $prioClass[$item->priority] }}">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ str_replace(['bg-', 'text-'], 'bg-', $prioClass[$item->priority]) }} bg-current"></span>
-                                                {{ $prioLabel[$item->priority] }}
+                                            <span class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-md text-[10px] uppercase tracking-wide border {{ $item->prioColor }}">
+                                                <span class="w-1.5 h-1.5 rounded-full {{ str_replace(['bg-', 'text-'], 'bg-', $item->prioColor) }} bg-current"></span>
+                                                {{ $item->prioLabel }}
                                             </span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center align-top">
-                                    @php
-                                        $statusClass = [
-                                            'pending'   => 'bg-yellow-100 text-yellow-800 border-yellow-200',
-                                            'approved'  => 'bg-teal-100 text-teal-800 border-teal-200',
-                                            'rejected'  => 'bg-red-100 text-red-800 border-red-200',
-                                            'purchased' => 'bg-indigo-100 text-indigo-800 border-indigo-200',
-                                        ];
-                                        $statusIcon = [
-                                            'pending'   => '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-                                            'approved'  => '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>',
-                                            'rejected'  => '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>',
-                                            'purchased' => '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>',
-                                        ];
-                                    @endphp
-                                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium border shadow-sm {{ $statusClass[$item->status] }}">
-                                        {!! $statusIcon[$item->status] !!}
+                                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium border shadow-sm {{ $item->statusColor }}">
+                                        {!! $item->statusIcon !!}
                                         {{ ucfirst($item->status) }}
                                     </span>
                                 </td>
