@@ -65,7 +65,7 @@ class TicketController extends Controller
         }
 
         $request->validate([
-            'action_type' => 'required|in:progress,resolved,cancel',
+            'action_type' => 'required|in:progress,resolved,cancel,transfer',
             'note' => 'nullable|string' 
         ]);
 
@@ -88,6 +88,22 @@ class TicketController extends Controller
             $ticket->assigned_to = null;
             $msg = $note ? $note : 'Tiket dikembalikan ke status Open.';
             $statusMessage = 'DIKEMBALIKAN: ' . $msg;
+        }
+        elseif ($request->action_type == 'transfer') {
+            $request->validate([
+                'transfer_to' => 'required|exists:users,id'
+            ], [
+                'transfer_to.required' => 'Anda harus memilih teknisi tujuan transfer.'
+            ]);
+            
+            $targetUser = \App\Models\User::find($request->transfer_to);
+            $ticket->assigned_to = $targetUser->id;
+            $msg = $note ? $note : 'Diteruskan ke rekan sejawat untuk penanganan lebih lanjut.';
+            $statusMessage = 'DITRANSFER ke ' . ($targetUser->full_name ?? $targetUser->username) . ': ' . $msg;
+        }
+
+        if ($request->has('asset_code_reference')) {
+            $ticket->asset_code_reference = $request->asset_code_reference;
         }
 
         $ticket->save();

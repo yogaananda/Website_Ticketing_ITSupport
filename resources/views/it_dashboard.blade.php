@@ -182,32 +182,53 @@
                                                     </button>
                                                 </div>
                                                 <div class="p-5">
-                                                    <div class="grid w-full gap-3 md:grid-cols-3 mb-5">
+                                                    <div class="grid w-full gap-3 grid-cols-2 mb-5">
                                                         <div>
-                                                            <input type="radio" id="act-p-{{ $ticket->id }}" name="action_type" value="progress" class="hidden peer" checked>
+                                                            <input type="radio" id="act-p-{{ $ticket->id }}" name="action_type" value="progress" class="hidden peer" checked onchange="document.getElementById('transfer-box-{{$ticket->id}}').classList.add('hidden')">
                                                             <label for="act-p-{{ $ticket->id }}" class="inline-flex flex-col items-center justify-between w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-50 transition-all shadow-sm h-full ring-0 peer-checked:ring-1 peer-checked:ring-blue-600">
                                                                 <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                                                 <div class="w-full text-xs font-semibold text-center">Update Progres</div>
-                                                                <div class="w-full text-[10px] text-center mt-1 text-gray-400 leading-tight">Catat aktivitas harian</div>
                                                             </label>
                                                         </div>
                                                         <div>
-                                                            <input type="radio" id="act-r-{{ $ticket->id }}" name="action_type" value="resolved" class="hidden peer">
+                                                            <input type="radio" id="act-r-{{ $ticket->id }}" name="action_type" value="resolved" class="hidden peer" onchange="document.getElementById('transfer-box-{{$ticket->id}}').classList.add('hidden')">
                                                             <label for="act-r-{{ $ticket->id }}" class="inline-flex flex-col items-center justify-between w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-600 peer-checked:text-green-600 hover:text-gray-600 hover:bg-gray-50 transition-all shadow-sm h-full ring-0 peer-checked:ring-1 peer-checked:ring-green-600">
                                                                 <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                                 <div class="w-full text-xs font-semibold text-center">Selesaikan</div>
-                                                                <div class="w-full text-[10px] text-center mt-1 text-gray-400 leading-tight">Masalah tuntas diperbaiki</div>
                                                             </label>
                                                         </div>
                                                         <div>
-                                                            <input type="radio" id="act-c-{{ $ticket->id }}" name="action_type" value="cancel" class="hidden peer">
+                                                            <input type="radio" id="act-c-{{ $ticket->id }}" name="action_type" value="cancel" class="hidden peer" onchange="document.getElementById('transfer-box-{{$ticket->id}}').classList.add('hidden')">
                                                             <label for="act-c-{{ $ticket->id }}" class="inline-flex flex-col items-center justify-between w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-red-600 peer-checked:text-red-600 hover:text-gray-600 hover:bg-gray-50 transition-all shadow-sm h-full ring-0 peer-checked:ring-1 peer-checked:ring-red-600">
                                                                 <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                                 <div class="w-full text-xs font-semibold text-center">Lepas Tiket</div>
-                                                                <div class="w-full text-[10px] text-center mt-1 text-gray-400 leading-tight">Kembalikan ke Open</div>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="radio" id="act-t-{{ $ticket->id }}" name="action_type" value="transfer" class="hidden peer" onchange="document.getElementById('transfer-box-{{$ticket->id}}').classList.remove('hidden')">
+                                                            <label for="act-t-{{ $ticket->id }}" class="inline-flex flex-col items-center justify-between w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-orange-500 peer-checked:text-orange-500 hover:text-gray-600 hover:bg-gray-50 transition-all shadow-sm h-full ring-0 peer-checked:ring-1 peer-checked:ring-orange-500">
+                                                                <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                                                <div class="w-full text-xs font-semibold text-center">Transfer</div>
                                                             </label>
                                                         </div>
                                                     </div>
+
+                                                    <!-- Dropdown Transfer Teknisi (Ditampilkan saat Transfer dipilih) -->
+                                                    <div id="transfer-box-{{$ticket->id}}" class="hidden mb-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                                        <label class="block mb-2 text-sm font-medium text-orange-900">Alihkan ke Rekan Teknisi:</label>
+                                                        <select name="transfer_to" class="w-full bg-white border border-orange-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2.5">
+                                                            <option value="">Pilih Teknisi Tujuan...</option>
+                                                            @foreach($otherItUsers as $it)
+                                                                <option value="{{ $it->id }}">{{ $it->full_name ?? $it->username }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <label class="block mb-2 text-sm font-medium text-gray-900">Kode Aset Terkait (Opsional):</label>
+                                                        <input type="text" name="asset_code_reference" value="{{ $ticket->asset_code_reference }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Contoh: AST-001 (Untuk riwayat kerusakan aset)">
+                                                    </div>
+
                                                     <label class="block mb-2 text-sm font-medium text-gray-900">Catatan Aktivitas:</label>
                                                     <textarea name="note" rows="3" class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500" placeholder="Apa yang Anda kerjakan?"></textarea>
                                                 </div>

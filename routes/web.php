@@ -52,7 +52,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
         Route::post('/maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
         Route::delete('/maintenance/{id}', [MaintenanceController::class, 'destroy'])->name('maintenance.destroy');
-
+        
+        Route::get('/knowledge-base', [\App\Http\Controllers\KnowledgeBaseController::class, 'index'])->name('knowledge_base.index');
+        Route::post('/knowledge-base', [\App\Http\Controllers\KnowledgeBaseController::class, 'store'])->name('knowledge_base.store');
+        Route::delete('/knowledge-base/{id}', [\App\Http\Controllers\KnowledgeBaseController::class, 'destroy'])->name('knowledge_base.destroy');
     });
 
     Route::prefix('user')->name('user.')->group(function () {   

@@ -11,7 +11,7 @@ class AssetController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Asset::with('user'); 
+        $query = Asset::with(['user', 'tickets.user', 'tickets.technician']);  
 
         if ($request->filled('search')) {
             $search = $request->search;

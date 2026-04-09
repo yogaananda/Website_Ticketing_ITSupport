@@ -91,7 +91,12 @@ class DashboardController extends Controller
         $onProgress = Ticket::where('status', 'in_progress')->count();
         $completedToday = Ticket::where('status', 'resolved')->whereDate('updated_at', Carbon::today())->count();
 
-        return view('it_dashboard', compact('tickets', 'urgent', 'newTickets', 'onProgress', 'completedToday'));
+        // Ambil personel IT Support lainnya untuk fitur Transfer Tiket
+        $otherItUsers = User::where('role', 'it_support')
+                            ->where('id', '!=', Auth::id())
+                            ->get();
+
+        return view('it_dashboard', compact('tickets', 'urgent', 'newTickets', 'onProgress', 'completedToday', 'otherItUsers'));
     }
 
     public function admin(Request $request)

@@ -25,4 +25,9 @@ class Asset extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'asset_code_reference', 'code');
+    }
 }

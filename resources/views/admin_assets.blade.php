@@ -93,12 +93,11 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <button type="button" 
-                                    data-modal-target="modal-edit-asset-{{ $item->id }}" 
-                                    data-modal-toggle="modal-edit-asset-{{ $item->id }}" 
-                                    class="group p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
-                                    title="Edit Aset">
+                                <button type="button" data-modal-target="modal-edit-asset-{{ $item->id }}" data-modal-toggle="modal-edit-asset-{{ $item->id }}" class="group p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all" title="Edit Aset">
                                     <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </button>
+                                <button type="button" data-modal-target="modal-history-asset-{{ $item->id }}" data-modal-toggle="modal-history-asset-{{ $item->id }}" class="group p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-all" title="Riwayat Kerusakan (Tiket)">
+                                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </button>
                                 <form action="{{ route('admin.assets.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus aset {{ $item->name }}?');">
                                     @csrf @method('DELETE')
@@ -326,6 +325,74 @@
                     <button type="submit" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition-all transform active:scale-95">Simpan Perubahan</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Riwayat Tiket / Kerusakan Aset -->
+<div id="modal-history-asset-{{ $item->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900/30">
+    <div class="relative p-4 w-full max-w-4xl max-h-full">
+        <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Riwayat Kerusakan Aset</h3>
+                    <p class="text-xs text-gray-500 mt-1">Rekam jejak pelaporan teknis untuk: <span class="text-indigo-600 font-bold">{{ $item->name }} ({{ $item->code }})</span></p>
+                </div>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-red-50 hover:text-red-600 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center" data-modal-hide="modal-history-asset-{{ $item->id }}">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 14 14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+                </button>
+            </div>
+            <div class="p-5 overflow-auto max-h-[60vh]">
+                @if($item->tickets && $item->tickets->count() > 0)
+                <div class="relative overflow-x-auto shadow-sm sm:rounded-lg border border-gray-200">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Tiket & Tgl</th>
+                                <th scope="col" class="px-6 py-3">Pelapor</th>
+                                <th scope="col" class="px-6 py-3">Kendala</th>
+                                <th scope="col" class="px-6 py-3">Status</th>
+                                <th scope="col" class="px-6 py-3">Teknisi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($item->tickets as $ticket)
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <span class="text-indigo-600">#{{ $ticket->ticket_code }}</span><br>
+                                    <span class="text-xs text-gray-400">{{ $ticket->created_at->format('d M Y') }}</span>
+                                </td>
+                                <td class="px-6 py-4">{{ $ticket->user->full_name ?? $ticket->user->username ?? '-' }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-800">{{ Str::limit($ticket->title, 20) }}</div>
+                                    <div class="text-xs text-gray-500">{{ Str::limit($ticket->description, 30) }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($ticket->status == 'resolved')
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-300">Selesai</span>
+                                    @elseif($ticket->status == 'in_progress')
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-300">Diproses</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded border border-gray-300">Menunggu</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">{{ $ticket->technician->full_name ?? '-' }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+                    <svg class="w-10 h-10 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <h3 class="text-sm font-medium text-gray-900">Belum Ada Riwayat Kerusakan</h3>
+                    <p class="text-xs text-gray-500 mt-1">Aset ini belum pernah dilaporkan rusak melalui sistem tiket.</p>
+                </div>
+                @endif
+            </div>
+            <div class="flex justify-end p-5 border-t border-gray-100 bg-gray-50/50">
+                <button data-modal-hide="modal-history-asset-{{ $item->id }}" type="button" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Tutup</button>
+            </div>
         </div>
     </div>
 </div>
