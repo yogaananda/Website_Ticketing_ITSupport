@@ -139,6 +139,12 @@
                     <span class="ms-3">Minta Tinta/ATK</span>
                 </a>
             </li>
+            <li> 
+                <a href="{{ route('user.faq') }}" class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('user.faq') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
+                    <svg class="w-5 h-5 transition duration-75 {{ isActive('user.faq') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span class="ms-3">Pusat Bantuan / FAQ</span>
+                </a>
+            </li>
             @endif
             <li class="pt-4 mt-4 border-t border-indigo-300">
                 <a href="javascript:void(0)" data-modal-target="modal-logout" data-modal-toggle="modal-logout" 

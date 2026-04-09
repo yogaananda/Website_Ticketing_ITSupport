@@ -101,4 +101,20 @@ class TicketController extends Controller
         return back()->with('success', 'Status tiket berhasil diperbarui!');
     }
     
+    public function destroy($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak berhak menghapus tiket ini.');
+        }
+
+        if ($ticket->status !== 'open') {
+            return back()->with('error', 'Tiket yang sudah diproses tidak dapat dihapus.');
+        }
+
+        $ticket->delete();
+
+        return redirect()->route('user.dashboard')->with('success', 'Laporan tiket berhasil dibatalkan dan dihapus.');
+    }
 }

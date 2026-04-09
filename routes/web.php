@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/my-assets', [UserAssetController::class, 'store'])->name('assets.store');
         Route::get('/consumables', [UserConsumableController::class, 'index'])->name('consumables.index');
         Route::post('/consumables', [UserConsumableController::class, 'store'])->name('consumables.store');
+        Route::get('/faq', [DashboardController::class, 'faq'])->name('faq');
     });
 
     Route::get('/tickets/{id}/detail', [TicketController::class, 'showDetail'])->name('tickets.showDetail');

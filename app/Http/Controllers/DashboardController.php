@@ -39,6 +39,11 @@ class DashboardController extends Controller
             $globalData
         ));
     }
+
+    public function faq()
+    {
+        return view('user_faq');
+    }
     
     public function it(Request $request)
     {
