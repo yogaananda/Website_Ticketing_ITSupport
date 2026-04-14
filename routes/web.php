@@ -25,7 +25,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
         Route::get('/report', [DashboardController::class, 'report'])->name('report');
         Route::get('/manage-users', [UserController::class, 'index'])->name('log_user');
@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-    Route::prefix('it')->name('it.')->group(function () {
+    Route::prefix('it')->name('it.')->middleware('role:it_support')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'it'])->name('dashboard');
         Route::get('/approvals', [ItApprovalController::class, 'index'])->name('approvals.index');
         Route::post('/approvals/asset/{id}/approve', [ItApprovalController::class, 'approveAsset'])->name('approvals.asset.approve');
@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/knowledge-base/{id}', [\App\Http\Controllers\KnowledgeBaseController::class, 'destroy'])->name('knowledge_base.destroy');
     });
 
-    Route::prefix('user')->name('user.')->group(function () {   
+    Route::prefix('user')->name('user.')->middleware('role:user')->group(function () {   
         Route::get('/dashboard', [DashboardController::class, 'user'])->name('dashboard');
         Route::get('/my-assets', [UserAssetController::class, 'index'])->name('assets.index');
         Route::post('/my-assets', [UserAssetController::class, 'store'])->name('assets.store');
