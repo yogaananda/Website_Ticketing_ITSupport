@@ -120,10 +120,10 @@
                 </div>
             </div>
         </div>
-        <table class="w-full text-sm text-left text-body">
+        <table class="mobile-card-table w-full text-sm text-left text-body">
             <thead class="text-sm text-body bg-neutral-secondary-medium border-b border-t border-default-medium">
                 <tr>
-                    <th scope="col" class="p-4"><input type="checkbox" class="w-4 h-4 border-default-medium rounded-xs"></th>
+                    <th scope="col" class="p-4 hide-mobile"><input type="checkbox" class="w-4 h-4 border-default-medium rounded-xs"></th>
                     <th scope="col" class="px-6 py-3 font-medium">Tiket & Waktu</th>
                     <th scope="col" class="px-6 py-3 font-medium">Barang & Masalah</th>
                     <th scope="col" class="px-6 py-3 font-medium">Pelapor</th>
@@ -134,8 +134,8 @@
             <tbody>
                 @forelse($tickets as $ticket)
                 <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium transition-colors">
-                    <td class="w-4 p-4"><input type="checkbox" class="w-4 h-4 border-default-medium rounded-xs"></td>
-                    <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
+                    <td class="w-4 p-4 hide-mobile"><input type="checkbox" class="w-4 h-4 border-default-medium rounded-xs"></td>
+                    <th scope="row" data-label="Tiket" class="px-6 py-4 font-medium text-heading">
                         #{{ $ticket->ticket_code }} <br>
                         @if($ticket->created_at->diffInHours() < 1)
                             <span class="text-xs text-red-600 font-normal">{{ $ticket->created_at->diffForHumans() }}</span>
@@ -143,12 +143,12 @@
                             <span class="text-xs text-body font-normal">{{ $ticket->created_at->diffForHumans() }}</span>
                         @endif
                     </th>
-                    <td class="px-6 py-4">
+                    <td data-label="Masalah" class="px-6 py-4">
                         <div class="text-heading font-medium">{{ Str::limit($ticket->title, 20) }}</div>
                         <div class="text-xs text-gray-500">{{ Str::limit($ticket->description, 30) }}</div>
                     </td>
-                    <td class="px-6 py-4">{{ $ticket->user->full_name ?? $ticket->user->username }}</td>
-                    <td class="px-6 py-4">
+                    <td data-label="Pelapor" class="px-6 py-4">{{ $ticket->user->full_name ?? $ticket->user->username }}</td>
+                    <td data-label="Prioritas" class="px-6 py-4">
                         @if($ticket->priority == 'high')
                             <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">High / Urgent</span>
                         @elseif($ticket->priority == 'medium')
@@ -157,7 +157,7 @@
                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-300">Low</span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-center">
+                    <td data-label="Aksi" class="px-6 py-4 text-center">
                         @if($ticket->status == 'open')
                             <form action="{{ route('tickets.update', $ticket->id) }}" method="POST">
                                 @csrf @method('PATCH')

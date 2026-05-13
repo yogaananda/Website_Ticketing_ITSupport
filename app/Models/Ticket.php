@@ -19,7 +19,14 @@ class Ticket extends Model
         'image_path', 
         'priority', 
         'status', 
-        'queue_number'
+        'queue_number',
+        'started_at',
+        'resolved_at',
+    ];
+
+    protected $casts = [
+        'started_at'  => 'datetime',
+        'resolved_at' => 'datetime',
     ];
 
     public function user()

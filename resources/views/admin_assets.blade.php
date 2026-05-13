@@ -26,7 +26,7 @@
     </div>
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
+            <table class="mobile-card-table min-w-full divide-y divide-gray-100">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase text-left">Informasi Aset</th>
@@ -39,7 +39,7 @@
                 <tbody class="bg-white divide-y divide-gray-100">
                     @forelse($assets as $item)
                     <tr class="hover:bg-gray-50 transition-colors duration-200">
-                        <td class="px-6 py-4">
+                        <td data-label="Aset" class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-12 h-12 rounded-lg bg-gray-100 border flex items-center justify-center overflow-hidden shrink-0">
                                     @if($item->image_path)
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td data-label="Status" class="px-6 py-4 whitespace-nowrap">
                             <div class="flex flex-col gap-2">
                                 @php
                                     $statusLabel = [
@@ -80,7 +80,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td data-label="Pemegang" class="px-6 py-4 whitespace-nowrap">
                             @if($item->user)
                                 <div class="text-sm font-medium text-gray-900">{{ $item->user->full_name }}</div>
                                 <div class="text-xs text-gray-500">{{ $item->user->division ?? 'Karyawan' }}</div>
@@ -91,7 +91,7 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <td data-label="Aksi" class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <button type="button" data-modal-target="modal-edit-asset-{{ $item->id }}" data-modal-toggle="modal-edit-asset-{{ $item->id }}" class="group p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all" title="Edit Aset">
                                     <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>

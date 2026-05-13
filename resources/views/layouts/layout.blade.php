@@ -131,6 +131,15 @@
                     <span class="ms-3">Buku Panduan IT</span>
                 </a>
             </li>
+            <li class="pt-2 mt-2 border-t border-indigo-300/50">
+                <p class="text-xs font-semibold text-indigo-500 uppercase px-3 mb-2">Riwayat</p>
+            </li>
+            <li> 
+                <a href="{{ route('it.history') }}" class="flex items-center px-3 py-2 rounded-lg transition-all group {{ isActive('it.history') ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-700 hover:bg-white/50 hover:text-indigo-700' }}">
+                    <svg class="w-5 h-5 transition duration-75 {{ isActive('it.history') ? 'text-indigo-700' : 'group-hover:text-indigo-700' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                    <span class="ms-3">Riwayat Saya</span>
+                </a>
+            </li>
             @endif
             @if($role === 'user')
             <li class="pt-2 mt-2 border-t border-indigo-300/50">

@@ -97,6 +97,40 @@ class DashboardController extends Controller
         return view('it_dashboard', compact('tickets', 'urgent', 'newTickets', 'onProgress', 'completedToday', 'otherItUsers'));
     }
 
+    public function itHistory(Request $request)
+    {
+        $itUserId = Auth::id();
+
+        $query = Ticket::with(['user', 'category', 'technician'])
+            ->where('assigned_to', $itUserId)
+            ->whereIn('status', ['resolved', 'closed'])
+            ->latest('resolved_at');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('ticket_code', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($subQ) use ($search) {
+                      $subQ->where('full_name', 'like', "%{$search}%")
+                           ->orWhere('username', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('category', function($subQ) use ($search) {
+                      $subQ->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $historyTickets = $query->paginate(10)->withQueryString();
+
+        // Hitung total tiket selesai oleh IT ini
+        $totalDone     = Ticket::where('assigned_to', $itUserId)->whereIn('status', ['resolved', 'closed'])->count();
+        $doneToday     = Ticket::where('assigned_to', $itUserId)->whereIn('status', ['resolved', 'closed'])->whereDate('resolved_at', Carbon::today())->count();
+        $doneThisMonth = Ticket::where('assigned_to', $itUserId)->whereIn('status', ['resolved', 'closed'])->whereMonth('resolved_at', Carbon::now()->month)->whereYear('resolved_at', Carbon::now()->year)->count();
+
+        return view('it_history', compact('historyTickets', 'totalDone', 'doneToday', 'doneThisMonth'));
+    }
+
     public function admin(Request $request)
     {
         $users = User::withCount(['it_tickets' => function ($q) {

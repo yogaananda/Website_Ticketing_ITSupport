@@ -64,7 +64,7 @@
    </div>
    
 <div class="relative overflow-x-auto bg-white shadow-sm rounded-lg border border-gray-200">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <table class="mobile-card-table w-full text-sm text-left rtl:text-right text-gray-500">
          <thead class="text-sm text-gray-700 bg-gray-50 border-b border-gray-200">
             <tr>
                <th scope="col" class="px-6 py-3 font-medium">No. Tiket</th>
@@ -78,18 +78,18 @@
          <tbody>
             @forelse($tickets as $ticket)
             <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                <td class="px-6 py-4 font-bold text-indigo-600">
+                <td data-label="No. Tiket" class="px-6 py-4 font-bold text-indigo-600">
                     {{ $ticket->ticket_code }}
                 </td>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                <th scope="row" data-label="Judul" class="px-6 py-4 font-medium text-gray-900">
                     {{ Str::limit($ticket->title, 30) }}
                     <br>
                     <span class="text-xs font-normal text-gray-500">{{ $ticket->category->name ?? 'Umum' }}</span>
                 </th>
-                <td class="px-6 py-4">
+                <td data-label="Tgl Lapor" class="px-6 py-4">
                     {{ $ticket->created_at->format('d M Y') }}
                 </td>
-                <td class="px-6 py-4">
+                <td data-label="Urgensi" class="px-6 py-4">
                     @if($ticket->priority == 'high' || $ticket->priority == 'critical')
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 shadow-sm">
                             <svg class="size-2.5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
@@ -107,7 +107,7 @@
                         </span>
                     @endif
                 </td>
-                <td class="px-6 py-4">
+                <td data-label="Status" class="px-6 py-4">
                     @if($ticket->status == 'open')
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 shadow-sm">
                             <svg class="size-2.5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
@@ -125,7 +125,7 @@
                         </span>
                     @endif
                 </td>
-                <td class="px-6 py-4 text-center">
+                <td data-label="Aksi" class="px-6 py-4 text-center">
                     <button type="button" 
                             data-modal-target="modal-detail-{{ $ticket->id }}" 
                             data-modal-toggle="modal-detail-{{ $ticket->id }}" 

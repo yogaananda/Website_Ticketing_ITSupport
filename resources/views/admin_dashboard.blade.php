@@ -137,7 +137,7 @@
             
             <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
 
-                <table class="w-full text-sm text-left rtl:text-right text-body">
+                <table class="mobile-card-table w-full text-sm text-left rtl:text-right text-body">
                     <thead class="text-sm text-body bg-neutral-secondary-medium border-b border-t border-default-medium">
                         <tr>
                             <th scope="col" class="px-6 py-3 font-medium">Tiket & Barang</th>
@@ -150,25 +150,25 @@
                     <tbody>
                         @forelse($historyTickets as $ticket)
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium text-heading whitespace-nowrap">
+                            <td data-label="Tiket" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
                                 <span class="text-xs text-gray-500">{{ $ticket->ticket_code }}</span> <br>
                                 {{ Str::limit($ticket->title, 20) }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td data-label="Masalah" class="px-6 py-4">
                                 {{ Str::limit($ticket->description, 30) }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td data-label="Pelapor" class="px-6 py-4">
                                 {{ $ticket->user->full_name ?? $ticket->user->username }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td data-label="Tgl Selesai" class="px-6 py-4">
                                 {{ $ticket->updated_at->format('d M Y') }} <br>
                                 <span class="text-xs text-gray-400">{{ $ticket->updated_at->format('H:i') }}</span>
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td data-label="Status" class="px-6 py-4">
                                 <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-300">
                                     Selesai
                                 </span>

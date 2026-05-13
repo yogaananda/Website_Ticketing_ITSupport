@@ -75,11 +75,16 @@ class TicketController extends Controller
         if ($request->action_type == 'progress') {
             $ticket->status = 'in_progress';
             $ticket->assigned_to = $currentUserId;
+            // Hanya set started_at jika belum pernah diisi sebelumnya
+            if (!$ticket->started_at) {
+                $ticket->started_at = now();
+            }
             $msg = $note ? $note : 'Melakukan pengecekan / update progres.';
             $statusMessage = 'PROGRES: ' . $msg;
         }
         elseif ($request->action_type == 'resolved') {
             $ticket->status = 'resolved';
+            $ticket->resolved_at = now();
             $msg = $note ? $note : 'Masalah telah diselesaikan dengan baik.';
             $statusMessage = 'SELESAI: ' . $msg;
         }

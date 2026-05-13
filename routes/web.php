@@ -56,6 +56,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/knowledge-base', [\App\Http\Controllers\KnowledgeBaseController::class, 'index'])->name('knowledge_base.index');
         Route::post('/knowledge-base', [\App\Http\Controllers\KnowledgeBaseController::class, 'store'])->name('knowledge_base.store');
         Route::delete('/knowledge-base/{id}', [\App\Http\Controllers\KnowledgeBaseController::class, 'destroy'])->name('knowledge_base.destroy');
+
+        Route::get('/history', [DashboardController::class, 'itHistory'])->name('history');
     });
 
     Route::prefix('user')->name('user.')->middleware('role:user')->group(function () {   
