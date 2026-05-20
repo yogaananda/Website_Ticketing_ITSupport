@@ -12,6 +12,30 @@
 
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* =============================================
+   Override Flowbite CSS variables
+   Agar warna teks jelas & kontras di semua halaman
+   ============================================= */
+:root {
+    /* Warna teks utama - solid gelap */
+    --color-body:          #1f2937;   /* gray-800  */
+    --color-heading:       #111827;   /* gray-900  */
+
+    /* Background neutral */
+    --color-neutral-primary-soft:      #ffffff;
+    --color-neutral-secondary-medium:  #f3f4f6;   /* gray-100  */
+    --color-neutral-tertiary:          #e5e7eb;   /* gray-200  */
+
+    /* Border */
+    --color-default:        #e5e7eb;
+    --color-default-medium: #d1d5db;
+
+    /* Background utama halaman */
+    --color-light: #f0f4ff;
+}
+
+/* Tambahan: pastikan font Inter dimuat via Google Fonts */

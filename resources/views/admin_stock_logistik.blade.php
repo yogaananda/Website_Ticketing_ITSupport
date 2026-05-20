@@ -54,7 +54,7 @@
                                 </div>
                                 <div>
                                     <div class="text-sm font-bold text-gray-900">{{ $item->name }}</div>
-                                    <div class="text-xs text-gray-500">Updated: {{ $item->updated_at->diffForHumans() }}</div>
+                                    <div class="text-xs text-gray-500">Diperbarui: {{ $item->updated_at->diffForHumans() }}</div>
                                 </div>
                             </div>
                         </td>
@@ -123,9 +123,9 @@
         </div>
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
-                Showing <span class="font-semibold text-gray-900">{{ $consumables->firstItem() ?? 0 }}</span> 
-                to <span class="font-semibold text-gray-900">{{ $consumables->lastItem() ?? 0 }}</span> 
-                of <span class="font-semibold text-gray-900">{{ $consumables->total() }}</span> results
+                Menampilkan <span class="font-semibold text-gray-900">{{ $consumables->firstItem() ?? 0 }}</span> 
+                hingga <span class="font-semibold text-gray-900">{{ $consumables->lastItem() ?? 0 }}</span> 
+                dari <span class="font-semibold text-gray-900">{{ $consumables->total() }}</span> data
             </div>
             @if ($consumables->hasPages())
                 {{ $consumables->appends(request()->query())->links('pagination::tailwind') }}
@@ -144,7 +144,7 @@
                 </div>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-red-50 hover:text-red-600 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center transition-colors" data-modal-hide="modal-add-consumable">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
-                    <span class="sr-only">Close modal</span>
+                    <span class="sr-only">Tutup modal</span>
                 </button>
             </div>
 
@@ -189,7 +189,7 @@
                             <input type="text" name="unit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" placeholder="Pcs/Rim" required>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-semibold text-gray-900">Min. Alert</label>
+                            <label class="block mb-2 text-sm font-semibold text-gray-900">Min. Peringatan</label>
                             <input type="number" name="min_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" value="5" required>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                     </svg>
                                     <p class="text-xs text-gray-500"><span class="font-semibold">Klik untuk upload</span> atau drag file</p>
-                                    <p class="text-[10px] text-gray-400 mt-1">SVG, PNG, JPG (MAX. 2MB)</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">SVG, PNG, JPG (Maks. 2MB)</p>
                                 </div>
                                 <input id="dropzone-file-add" name="image" type="file" class="hidden" />
                             </label>
@@ -280,7 +280,7 @@
                             <input type="text" name="unit" value="{{ $item->unit }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" required>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-semibold text-gray-900">Min. Alert</label>
+                            <label class="block mb-2 text-sm font-semibold text-gray-900">Min. Peringatan</label>
                             <input type="number" name="min_stock" value="{{ $item->min_stock }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" required>
                         </div>
                     </div>

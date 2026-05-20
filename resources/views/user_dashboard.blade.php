@@ -268,13 +268,13 @@
       
       <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
-                Showing 
+                Menampilkan 
                 <span class="font-semibold text-gray-900">{{ $tickets->firstItem() ?? 0 }}</span> 
-                to 
+                hingga 
                 <span class="font-semibold text-gray-900">{{ $tickets->lastItem() ?? 0 }}</span> 
-                of 
+                dari 
                 <span class="font-semibold text-gray-900">{{ $tickets->total() }}</span> 
-                results
+                data
             </div>
             @if ($tickets->hasPages())
             <nav aria-label="Page navigation example">
@@ -282,11 +282,11 @@
                     <li>
                         @if ($tickets->onFirstPage())
                             <span class="flex items-center justify-center text-gray-400 bg-white box-border border border-gray-300 font-medium rounded-s-lg text-sm px-3 h-10 cursor-not-allowed">
-                                Previous
+                                Sebelumnya
                             </span>
                         @else
                             <a href="{{ $tickets->appends(request()->query())->previousPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white box-border border border-gray-300 hover:bg-gray-100 hover:text-gray-700 font-medium rounded-s-lg text-sm px-3 h-10 focus:outline-none transition-colors">
-                                Previous
+                                Sebelumnya
                             </a>
                         @endif
                     </li>
@@ -306,11 +306,11 @@
                     <li>
                         @if ($tickets->hasMorePages())
                             <a href="{{ $tickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white box-border border border-gray-300 hover:bg-gray-100 hover:text-gray-700 font-medium rounded-e-lg text-sm px-3 h-10 focus:outline-none transition-colors">
-                                Next
+                                Berikutnya
                             </a>
                         @else
                             <span class="flex items-center justify-center text-gray-400 bg-white box-border border border-gray-300 font-medium rounded-e-lg text-sm px-3 h-10 cursor-not-allowed">
-                                Next
+                                Berikutnya
                             </span>
                         @endif
                     </li>
@@ -335,7 +335,7 @@
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
-                    <span class="sr-only">Close modal</span>
+                    <span class="sr-only">Tutup modal</span>
                 </button>
             </div>
 
@@ -373,7 +373,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900">Foto Bukti (Opsional)</label>
                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" name="image" type="file">
-                    <p class="mt-1 text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 2MB).</p>
+                    <p class="mt-1 text-xs text-gray-500">SVG, PNG, JPG atau GIF (Maks. 2MB).</p>
                 </div>
 
                 <div class="flex items-center justify-end pt-4 border-t border-gray-200">

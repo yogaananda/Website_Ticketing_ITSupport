@@ -393,9 +393,9 @@
 
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
-                Showing <span class="font-semibold text-gray-900">{{ $tickets->firstItem() ?? 0 }}</span> 
-                to <span class="font-semibold text-gray-900">{{ $tickets->lastItem() ?? 0 }}</span> 
-                of <span class="font-semibold text-gray-900">{{ $tickets->total() }}</span> results
+                Menampilkan <span class="font-semibold text-gray-900">{{ $tickets->firstItem() ?? 0 }}</span> 
+                hingga <span class="font-semibold text-gray-900">{{ $tickets->lastItem() ?? 0 }}</span> 
+                dari <span class="font-semibold text-gray-900">{{ $tickets->total() }}</span> data
             </div>
 
             @if ($tickets->hasPages())
@@ -403,9 +403,9 @@
                 <ul class="flex -space-x-px text-sm">
                     <li>
                         @if ($tickets->onFirstPage())
-                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 rounded-s-lg px-3 h-10 cursor-not-allowed">Previous</span>
+                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 rounded-s-lg px-3 h-10 cursor-not-allowed">Sebelumnya</span>
                         @else
-                            <a href="{{ $tickets->appends(request()->query())->previousPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 px-3 h-10 transition-all rounded-s-lg">Previous</a>
+                            <a href="{{ $tickets->appends(request()->query())->previousPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 px-3 h-10 transition-all rounded-s-lg">Sebelumnya</a>
                         @endif
                     </li>
                     @foreach (range(1, $tickets->lastPage()) as $i)
@@ -419,9 +419,9 @@
                     @endforeach
                     <li>
                         @if ($tickets->hasMorePages())
-                            <a href="{{ $tickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 px-3 h-10 transition-all rounded-e-lg">Next</a>
+                            <a href="{{ $tickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 px-3 h-10 transition-all rounded-e-lg">Berikutnya</a>
                         @else
-                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 rounded-e-lg px-3 h-10 cursor-not-allowed">Next</span>
+                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 rounded-e-lg px-3 h-10 cursor-not-allowed">Berikutnya</span>
                         @endif
                     </li>
                 </ul>

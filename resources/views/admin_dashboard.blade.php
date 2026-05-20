@@ -72,7 +72,7 @@
                     <div>
                         <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
                             <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"/></svg>
-                            Data Live
+                            Data Langsung
                         </span>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                         <dd class="text-gray-900 text-sm font-semibold">{{ $resolvedWeekly }}</dd>
                     </dl>
                     <dl class="flex items-center justify-end">
-                        <dt class="text-gray-500 text-sm font-normal me-1">Pending:</dt>
+                        <dt class="text-gray-500 text-sm font-normal me-1">Menunggu:</dt>
                         <dd class="text-gray-900 text-sm font-semibold">{{ $pendingWeekly }}</dd>
                     </dl>
                 </div>
@@ -93,11 +93,11 @@
                 <div class="grid grid-cols-1 items-center border-t border-gray-200 justify-between mt-5">
                     <div class="flex justify-between items-center pt-5">
                         <button class="text-sm font-medium text-gray-500 hover:text-gray-900 text-center inline-flex items-center" type="button">
-                            Last 7 days
+                            7 Hari Terakhir
                             <svg class="w-2.5 h-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                         </button>
                         <a href="{{ route('admin.report') }}" class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 hover:bg-gray-100 px-3 py-2">
-                            FULL REPORT
+                            LAPORAN LENGKAP
                             <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
                         </a>
                     </div>
@@ -107,7 +107,7 @@
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
                 <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
                     <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
-                    On Progress
+                    Sedang Diproses
                 </h3>
                 <ul class="divide-y divide-gray-200">
                     @forelse($ongoingTickets as $ticket)
@@ -118,9 +118,9 @@
                                 <p class="text-xs text-gray-500 truncate">{{ $ticket->ticket_code }}</p>
                             </div>
                             @if($ticket->priority == 'high')
-                                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">High</span>
+                                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Tinggi</span>
                             @elseif($ticket->priority == 'medium')
-                                <span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Med</span>
+                                <span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Sedang</span>
                             @else
                                 <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Low</span>
                             @endif
@@ -185,9 +185,9 @@
                 </table>
         <div class="bg-white px-6 py-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-sm font-normal text-gray-500">
-                Showing <span class="font-semibold text-gray-900">{{ $historyTickets->firstItem() ?? 0 }}</span> 
-                to <span class="font-semibold text-gray-900">{{ $historyTickets->lastItem() ?? 0 }}</span> 
-                of <span class="font-semibold text-gray-900">{{ $historyTickets->total() }}</span> results
+                Menampilkan <span class="font-semibold text-gray-900">{{ $historyTickets->firstItem() ?? 0 }}</span> 
+                hingga <span class="font-semibold text-gray-900">{{ $historyTickets->lastItem() ?? 0 }}</span> 
+                dari <span class="font-semibold text-gray-900">{{ $historyTickets->total() }}</span> data
             </div>
 
             @if ($historyTickets->hasPages())
@@ -195,9 +195,9 @@
                 <ul class="flex -space-x-px text-sm">
                     <li>
                         @if ($historyTickets->onFirstPage())
-                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 font-medium rounded-s-lg px-3 h-10 cursor-not-allowed">Previous</span>
+                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 font-medium rounded-s-lg px-3 h-10 cursor-not-allowed">Sebelumnya</span>
                         @else
-                            <a href="{{ $historyTickets->appends(request()->query())->previousPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-s-lg px-3 h-10 transition-colors">Previous</a>
+                            <a href="{{ $historyTickets->appends(request()->query())->previousPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-s-lg px-3 h-10 transition-colors">Sebelumnya</a>
                         @endif
                     </li>
 
@@ -213,9 +213,9 @@
 
                     <li>
                         @if ($historyTickets->hasMorePages())
-                            <a href="{{ $historyTickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-e-lg px-3 h-10 transition-colors">Next</a>
+                            <a href="{{ $historyTickets->appends(request()->query())->nextPageUrl() }}" class="flex items-center justify-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-e-lg px-3 h-10 transition-colors">Berikutnya</a>
                         @else
-                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 font-medium rounded-e-lg px-3 h-10 cursor-not-allowed">Next</span>
+                            <span class="flex items-center justify-center text-gray-400 bg-white border border-gray-300 font-medium rounded-e-lg px-3 h-10 cursor-not-allowed">Berikutnya</span>
                         @endif
                     </li>
                 </ul>
